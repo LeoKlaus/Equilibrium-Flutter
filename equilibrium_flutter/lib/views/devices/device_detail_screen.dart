@@ -2,39 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../HubConnectionHandler.dart';
+import '../../helpers/hub_connection_handler.dart';
 import '../../models/classes/device.dart';
 
 class DeviceDetailScreen extends StatefulWidget {
   final int deviceId;
 
-  const DeviceDetailScreen ({ super.key, required this.deviceId });
+  const DeviceDetailScreen({super.key, required this.deviceId});
 
   @override
   State<DeviceDetailScreen> createState() => _DeviceDetailScreenState();
 }
 
 class _DeviceDetailScreenState extends State<DeviceDetailScreen> {
-
   late Future<Device> deviceFuture;
 
-  final HubConnectionHandler connectionHandler = GetIt.instance<HubConnectionHandler>();
+  final HubConnectionHandler connectionHandler =
+      GetIt.instance<HubConnectionHandler>();
 
   _DeviceDetailScreenState();
 
   @override
   void initState() {
     super.initState();
-    try {
-      deviceFuture = connectionHandler.getDevice(widget.deviceId);
-    } on NotConnectedException {
-      context.go("/connect");
-    }
+    deviceFuture = connectionHandler.getDevice(widget.deviceId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Center(
         child: FutureBuilder<Device>(
           future: deviceFuture,

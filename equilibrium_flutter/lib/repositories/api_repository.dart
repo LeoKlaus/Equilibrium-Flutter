@@ -4,6 +4,7 @@ import 'package:equilibrium_flutter/models/classes/macro.dart';
 import 'package:equilibrium_flutter/models/classes/scene.dart';
 import 'package:equilibrium_flutter/models/classes/server_info.dart';
 import 'package:equilibrium_flutter/models/classes/status_report.dart';
+import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -88,9 +89,21 @@ class ApiRepository {
   }
 
   Future<List<Macro>> getMacros() async {
-    final uri = Uri.http(baseUri, "/commands");
+    final uri = Uri.http(baseUri, "/macros");
     final response = await http.get(uri);
     final List body = json.decode(response.body);
     return body.map((e) => Macro.fromJson(e)).toList();
+  }
+
+  Future<List<UserImage>> getImages() async {
+    final uri = Uri.http(baseUri, "/images");
+    final response = await http.get(uri);
+    final List body = json.decode(response.body);
+    return body.map((e) => UserImage.fromJson(e)).toList();
+  }
+
+  Future<void> deleteImage(int? id) async {
+    final uri = Uri.http(baseUri, "/images/$id");
+    await http.delete(uri);
   }
 }

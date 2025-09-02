@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../HubConnectionHandler.dart';
+import '../../helpers/hub_connection_handler.dart';
 
 class ConnectScreen extends StatelessWidget {
 

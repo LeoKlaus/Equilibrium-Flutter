@@ -1,9 +1,10 @@
-import 'package:equilibrium_flutter/HubConnectionHandler.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
-import 'package:equilibrium_flutter/repositories/api_repository.dart';
+import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../helpers/hub_connection_handler.dart';
 
 class DeviceList extends StatefulWidget {
   const DeviceList({super.key});
@@ -13,9 +14,8 @@ class DeviceList extends StatefulWidget {
 }
 
 class _DeviceListState extends State<DeviceList> {
-
   final HubConnectionHandler connectionHandler =
-  GetIt.instance<HubConnectionHandler>();
+      GetIt.instance<HubConnectionHandler>();
 
   late Future<List<Device>> devicesFuture;
 
@@ -25,21 +25,12 @@ class _DeviceListState extends State<DeviceList> {
   void initState() {
     super.initState();
     devicesFuture = connectionHandler.getDevices();
-    //loadDevices();
-  }
-
-  void loadDevices() async {
-    try {
-      final devices = await connectionHandler.getDevices();
-    } on NotConnectedException {
-      print("Received not connected while fetching devices");
-      if (mounted) context.go("/connect");
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Devices')),
       body: Center(
         child: FutureBuilder<List<Device>>(
           future: devicesFuture,
@@ -50,7 +41,21 @@ class _DeviceListState extends State<DeviceList> {
               final devices = snapshot.data!;
               return buildDevices(devices);
             } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
+              return Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  spacing: 20,
+                  children: [
+                    Text("Error: ${snapshot.error}"),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.go("/connect");
+                      },
+                      child: Text("Check connected hub."),
+                    ),
+                  ],
+                ),
+              );
             } else {
               return const Text("No data available");
             }
@@ -65,47 +70,23 @@ class _DeviceListState extends State<DeviceList> {
       itemCount: devices.length,
       itemBuilder: (context, index) {
         final device = devices[index];
-        return GestureDetector(
+        return TappableCard(
           onTap: () {
             GoRouter.of(context).go("/devices/${device.id}");
           },
-          child: Card(
-            margin: EdgeInsets.all(16.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            elevation: 2,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading:
-                        device.imageId == null
-                            ? Icon(device.type.icon, size: 32)
-                            : Image.network(
-                              "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
-                            ),
-                    title: Text(device.name),
-                    subtitle:
-                        device.manufacturer == null
-                            ? Text(
-                              device.model ?? "",
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                            )
-                            : Text(
-                              "${device.manufacturer ?? ""} ${device.model ?? ""}",
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                            ),
+          leadingTile:
+              device.imageId == null
+                  ? Icon(device.type.icon, size: 40)
+                  : Image.network(
+                    height: 40,
+                    width: 40,
+                    "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
                   ),
-                ],
-              ),
-            ),
-          ),
+          title: device.name,
+          subTitle:
+              device.manufacturer == null
+                  ? device.model ?? ""
+                  : "${device.manufacturer ?? ""} ${device.model ?? ""}",
         );
       },
     );
