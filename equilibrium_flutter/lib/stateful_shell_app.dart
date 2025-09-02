@@ -1,4 +1,5 @@
 import 'package:equilibrium_flutter/bottom_bar.dart';
+import 'package:equilibrium_flutter/views/bluetooth_devices/bluetooth_device_list.dart';
 import 'package:equilibrium_flutter/views/connect_hub/connect_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_detail_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_list.dart';
@@ -86,6 +87,11 @@ class StatefulShellApp extends StatelessWidget {
                       path: "/images",
                       builder:
                           (context, state) => const IconList()
+                  ),
+                  GoRoute(
+                      path: "/bluetooth_devices",
+                      builder:
+                          (context, state) => const BluetoothDeviceList()
                   ),
                 ],
               ),

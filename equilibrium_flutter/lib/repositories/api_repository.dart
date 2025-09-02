@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'dart:io';
 
+import 'package:equilibrium_flutter/models/classes/ble_device.dart';
 import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/classes/macro.dart';
@@ -15,7 +16,6 @@ import 'package:http/http.dart' as http;
 
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
-import 'package:mime/mime.dart';
 
 class ApiRepository {
   String baseUri;
@@ -138,5 +138,22 @@ class ApiRepository {
   Future<void> deleteImage(int? id) async {
     final uri = Uri.http(baseUri, "/images/$id");
     await http.delete(uri);
+  }
+
+  Future<List<BleDevice>> getBleDevices() async {
+    final uri = Uri.http(baseUri, "/bluetooth/devices");
+    final response = await http.get(uri);
+    final List body = json.decode(response.body);
+    return body.map((e) => BleDevice.fromJson(e)).toList();
+  }
+
+  Future<void> connectBleDevice(String address) async {
+    final uri = Uri.http(baseUri, "/bluetooth/connect/$address");
+    await http.post(uri);
+  }
+
+  Future<void> disconnectBleDevices() async {
+    final uri = Uri.http(baseUri, "/bluetooth/disconnect");
+    await http.post(uri);
   }
 }

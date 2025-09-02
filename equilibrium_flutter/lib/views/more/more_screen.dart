@@ -18,6 +18,27 @@ class MoreScreen extends StatelessWidget {
             leadingTile: Icon(Icons.image, size: 32),
             title: "Icons",
           ),
+          TappableCard(
+            onTap: () {
+              GoRouter.of(context).go("/more/bluetooth_devices/");
+            },
+            leadingTile: Icon(Icons.bluetooth, size: 32),
+            title: "Bluetooth Devices",
+          ),
+          TappableCard(
+            onTap: () {
+              GoRouter.of(context).go("/more/commands/");
+            },
+            leadingTile: Icon(Icons.code, size: 32),
+            title: "Commands",
+          ),
+          TappableCard(
+            onTap: () {
+              GoRouter.of(context).go("/more/macros/");
+            },
+            leadingTile: Icon(Icons.keyboard_command_key, size: 32),
+            title: "Macros",
+          ),
         ],
       ),
     );

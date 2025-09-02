@@ -67,6 +67,7 @@ class _DeviceListState extends State<DeviceList> {
 
   Widget buildDevices(List<Device> devices) {
     return ListView.builder(
+      padding: EdgeInsets.only(bottom: 72),
       itemCount: devices.length,
       itemBuilder: (context, index) {
         final device = devices[index];

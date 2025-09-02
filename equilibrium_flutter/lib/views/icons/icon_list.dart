@@ -61,14 +61,13 @@ class _IconListState extends State<IconList> {
 
   void deleteImage(int? id) async {
     await connectionHandler.deleteImage(id);
-
     await _refresh();
   }
 
   Future<void> _refresh() async {
-    List<UserImage> freshNumbers = await connectionHandler.getImages();
+    List<UserImage> images = await connectionHandler.getImages();
     setState(() {
-      iconsFuture = Future.value(freshNumbers);
+      iconsFuture = Future.value(images);
     });
   }
 

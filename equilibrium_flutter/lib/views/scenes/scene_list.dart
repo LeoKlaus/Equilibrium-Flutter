@@ -69,6 +69,7 @@ class _SceneListState extends State<SceneList> {
 
   Widget buildScenes(List<Scene> scenes) {
     return ListView.builder(
+      padding: EdgeInsets.only(bottom: 72),
       itemCount: scenes.length,
       itemBuilder: (context, index) {
         final scene = scenes[index];
@@ -79,8 +80,13 @@ class _SceneListState extends State<SceneList> {
           leadingTile: StatusInjected(
             sceneId: scene.id,
             sceneActiveWidget: CircleAvatar(
-              backgroundColor: Colors.lightGreen,
-              child: Center(child: Icon(Icons.power_settings_new, size: 32)),
+              backgroundColor: Colors.green,
+              child: Center(child: Icon(
+                color: Colors.black,
+                  Icons.power_settings_new,
+                  size: 32
+              )
+              ),
             ),
             sceneInactiveWidget:
                 (scene.image?.id == null
