@@ -26,6 +26,52 @@ class _IconListState extends State<IconList> {
 
   _IconListState();
 
+  void uploadImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ["jpg", "png", "webp"],
+    );
+    if (result != null) {
+      if (kIsWeb) {
+        final file = result.files.single;
+        if (file.bytes != null && file.path != null) {
+          await connectionHandler.uploadImageWeb(
+            file.bytes as List<int>,
+            file.path!,
+          );
+        } else {
+          developer.log("Couldn't access file");
+        }
+      } else {
+        String? path = result.files.single.path;
+        if (path != null) {
+          File file = File(path);
+          await connectionHandler.uploadImage(file);
+        } else {
+          developer.log("Couldn't access file");
+        }
+      }
+
+      await _refresh();
+    } else {
+      developer.log("File picker closed without selection");
+    }
+  }
+
+  void deleteImage(int? id) async {
+    await connectionHandler.deleteImage(id);
+
+    await _refresh();
+  }
+
+  Future<void> _refresh() async {
+    List<UserImage> freshNumbers = await connectionHandler.getImages();
+    setState(() {
+      iconsFuture = Future.value(freshNumbers);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -43,36 +89,7 @@ class _IconListState extends State<IconList> {
         title: Text('Icons'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          FilePickerResult? result = await FilePicker.platform.pickFiles(
-            allowMultiple: true,
-            type: FileType.custom,
-            allowedExtensions: ["jpg", "png", "webp"],
-          );
-          if (result != null) {
-            if (kIsWeb) {
-              final file = result.files.single;
-              if (file.bytes != null && file.path != null) {
-                await connectionHandler.uploadImageWeb(
-                    file.bytes as List<int>, file.path!);
-              } else {
-                developer.log("Couldn't access file");
-              }
-            } else {
-              String? path = result.files.single.path;
-              if (path != null) {
-                File file = File(path);
-                await connectionHandler.uploadImage(file);
-              } else {
-                developer.log("Couldn't access file");
-              }
-            }
-            // TODO: Check if this reloads
-            iconsFuture = connectionHandler.getImages();
-          } else {
-            developer.log("File picker closed without selection");
-          }
-        },
+        onPressed: uploadImage,
         child: Icon(Icons.add),
       ),
       body: Center(
@@ -110,69 +127,72 @@ class _IconListState extends State<IconList> {
   }
 
   Widget buildIcons(List<UserImage> icons) {
-    return ListView.builder(
-      itemCount: icons.length,
-      itemBuilder: (context, index) {
-        final icon = icons[index];
-        return StyledCard(
-          leadingTile: Image.network(
-            height: 40,
-            width: 40,
-            "http://${connectionHandler.api?.baseUri ?? ""}/images/${icon.id}",
-          ),
-          title: icon.filename,
-          subTitle: icon.path,
-          trailingTile: PopupMenuButton(
-            onSelected: (selection) {
-              switch (selection) {
-                case 1:
-                  showDialog<String>(
-                    context: context,
-                    builder:
-                        (BuildContext context) => AlertDialog(
-                          title: Text('Delete ${icon.filename}?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                connectionHandler.deleteImage(icon.id);
-                                // TODO: Check if this reloads
-                                iconsFuture = connectionHandler.getImages();
-                                Navigator.pop(context, 'OK');
-                              },
-                              child: const Text(
-                                'OK',
-                                style: TextStyle(color: Colors.red),
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 72),
+        itemCount: icons.length,
+        itemBuilder: (context, index) {
+          final icon = icons[index];
+          return StyledCard(
+            leadingTile: Image.network(
+              height: 40,
+              width: 40,
+              "http://${connectionHandler.api?.baseUri ?? ""}/images/${icon.id}",
+            ),
+            title: icon.filename,
+            subTitle: icon.path,
+            trailingTile: PopupMenuButton(
+              onSelected: (selection) {
+                switch (selection) {
+                  case 1:
+                    showDialog<String>(
+                      context: context,
+                      builder:
+                          (BuildContext context) => AlertDialog(
+                            title: Text('Delete ${icon.filename}?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed:
+                                    () => Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
                               ),
-                            ),
-                          ],
-                        ),
-                  );
-              }
-            },
-            itemBuilder:
-                (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    // row with 2 children
-                    child: Row(
-                      children: [
-                        const Icon(Icons.delete, color: Colors.red),
-                        SizedBox(width: 10),
-                        const Text(
-                          "Delete",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
+                              TextButton(
+                                onPressed: () => {
+                                  Navigator.pop(context, 'Delete'),
+                                  deleteImage(icon.id)
+                                },
+                                child: const Text(
+                                  'Delete',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                    );
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      // row with 2 children
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.red),
+                          SizedBox(width: 10),
+                          const Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-          ),
-        );
-      },
+                  ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
