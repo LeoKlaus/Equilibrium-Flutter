@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:equilibrium_flutter/helpers/preference_handler.dart';
 import 'package:equilibrium_flutter/models/classes/scene.dart';
@@ -100,6 +101,24 @@ class HubConnectionHandler {
     final localApi = api;
     if (localApi != null) {
       return await localApi.getImages();
+    } else {
+      throw NotConnectedException();
+    }
+  }
+
+  Future<void> uploadImage(File image) async {
+    final localApi = api;
+    if (localApi != null) {
+      return await localApi.uploadImage(image);
+    } else {
+      throw NotConnectedException();
+    }
+  }
+
+  Future<void> uploadImageWeb(List<int> bytes, String path) async {
+    final localApi = api;
+    if (localApi != null) {
+      return await localApi.uploadImageWeb(bytes, path);
     } else {
       throw NotConnectedException();
     }

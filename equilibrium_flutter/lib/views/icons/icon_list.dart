@@ -1,4 +1,9 @@
+import 'dart:developer' as developer;
+import 'dart:io';
+
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -37,8 +42,37 @@ class _IconListState extends State<IconList> {
         ),
         title: Text('Icons'),
       ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {},
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            allowMultiple: true,
+            type: FileType.custom,
+            allowedExtensions: ["jpg", "png", "webp"],
+          );
+          if (result != null) {
+            if (kIsWeb) {
+              final file = result.files.single;
+              if (file.bytes != null && file.path != null) {
+                await connectionHandler.uploadImageWeb(
+                    file.bytes as List<int>, file.path!);
+              } else {
+                developer.log("Couldn't access file");
+              }
+            } else {
+              String? path = result.files.single.path;
+              if (path != null) {
+                File file = File(path);
+                await connectionHandler.uploadImage(file);
+              } else {
+                developer.log("Couldn't access file");
+              }
+            }
+            // TODO: Check if this reloads
+            iconsFuture = connectionHandler.getImages();
+          } else {
+            developer.log("File picker closed without selection");
+          }
+        },
         child: Icon(Icons.add),
       ),
       body: Center(
@@ -105,6 +139,7 @@ class _IconListState extends State<IconList> {
                             TextButton(
                               onPressed: () {
                                 connectionHandler.deleteImage(icon.id);
+                                // TODO: Check if this reloads
                                 iconsFuture = connectionHandler.getImages();
                                 Navigator.pop(context, 'OK');
                               },

@@ -1,3 +1,6 @@
+import 'dart:developer' as developer;
+import 'dart:io';
+
 import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/classes/macro.dart';
@@ -7,9 +10,12 @@ import 'package:equilibrium_flutter/models/classes/status_report.dart';
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart';
+import 'package:mime/mime.dart';
 
 class ApiRepository {
   String baseUri;
@@ -21,9 +27,7 @@ class ApiRepository {
   WebSocketChannel? _socket;
 
   void connectToStatusSocket() {
-    _socket = WebSocketChannel.connect(
-      Uri.parse('ws://$baseUri/ws/status'),
-    );
+    _socket = WebSocketChannel.connect(Uri.parse('ws://$baseUri/ws/status'));
     _socket?.stream.listen(_handleSocketUpdate);
   }
 
@@ -42,7 +46,7 @@ class ApiRepository {
     final body = json.decode(response.body);
     return ServerInfo.fromJson(body);
   }
-  
+
   Future<List<Device>> getDevices() async {
     final uri = Uri.http(baseUri, "/devices");
     final response = await http.get(uri);
@@ -100,6 +104,35 @@ class ApiRepository {
     final response = await http.get(uri);
     final List body = json.decode(response.body);
     return body.map((e) => UserImage.fromJson(e)).toList();
+  }
+
+  Future<void> uploadImage(File image) async {
+    final uri = Uri.http(baseUri, "/images/");
+    var request = http.MultipartRequest("POST", uri);
+    final type = ContentType.parse(image.path);
+    request.files.add(
+      http.MultipartFile(
+        "file",
+        image.openRead(),
+        await image.length(),
+        filename: basename(image.path),
+        contentType: MediaType(type.primaryType, type.subType),
+      ),
+    );
+
+    final response = await request.send();
+    developer.log("Server responded ${response.statusCode} to file upload");
+  }
+
+  Future<void> uploadImageWeb(List<int> bytes, String path) async {
+    final uri = Uri.http(baseUri, "/images/");
+    var request = http.MultipartRequest("POST", uri);
+    request.files.add(
+      http.MultipartFile.fromBytes("file", bytes, filename: basename(path)),
+    );
+
+    final response = await request.send();
+    developer.log("Server responded ${response.statusCode} to file upload");
   }
 
   Future<void> deleteImage(int? id) async {
