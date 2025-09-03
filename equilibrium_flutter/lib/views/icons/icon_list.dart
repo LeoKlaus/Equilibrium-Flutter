@@ -28,10 +28,11 @@ class _IconListState extends State<IconList> {
 
   void uploadImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
+      allowMultiple: false,
       type: FileType.custom,
       allowedExtensions: ["jpg", "png", "webp"],
     );
+
     if (result != null) {
       if (kIsWeb) {
         final file = result.files.single;
