@@ -1,9 +1,14 @@
+import 'package:equilibrium_flutter/helpers/preference_handler.dart';
 import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class MoreScreen extends StatelessWidget {
-  const MoreScreen({super.key});
+  MoreScreen({super.key});
+
+  final EquilibriumSettings settings = GetIt.instance<EquilibriumSettings>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +43,24 @@ class MoreScreen extends StatelessWidget {
             },
             leadingTile: Icon(Icons.keyboard_command_key, size: 32),
             title: "Macros",
+          ),
+          StyledCard(
+            leadingTile: Icon(Icons.invert_colors),
+            title: "Invert Images in Dark Mode",
+            /*trailingTile: Switch(
+              value:
+                  PreferenceHandler.getBool(PreferenceKeys.invertImages) ??
+                  false,
+              onChanged: (newValue) async {
+                await PreferenceHandler.setBool(PreferenceKeys.invertImages, newValue);
+              },
+            ),*/
+            trailingTile: PreferenceBuilder<bool>(preference: settings.invertImages, builder: (context, invertImages) =>
+            Switch(
+              value: invertImages,
+              onChanged: (newValue) => settings.invertImages.setValue(!invertImages),
+            )
+            ),
           ),
         ],
       ),

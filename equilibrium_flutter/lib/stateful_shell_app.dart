@@ -81,7 +81,7 @@ class StatefulShellApp extends StatelessWidget {
               GoRoute(
                 path: '/more',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const MoreScreen();
+                  return MoreScreen();
                 },
                 routes: <RouteBase>[
                   GoRoute(

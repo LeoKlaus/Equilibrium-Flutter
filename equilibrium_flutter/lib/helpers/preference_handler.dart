@@ -1,27 +1,15 @@
-import 'dart:async' show Future;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class PreferenceKeys {
-  static final hubHUrl = "hub_url";
+  static final hubUrl = "hub_url";
+  static final invertImages = "invert_images";
 }
 
-class PreferenceHandler {
-  static Future<SharedPreferences> get _instance async => _prefsInstance ??= await SharedPreferences.getInstance();
+class EquilibriumSettings {
+  EquilibriumSettings(StreamingSharedPreferences preferences)
+      : invertImages = preferences.getBool(PreferenceKeys.invertImages, defaultValue: false),
+        hubUrl = preferences.getString(PreferenceKeys.hubUrl, defaultValue: "null");
 
-  static SharedPreferences? _prefsInstance;
-
-  // call this method from iniState() function of mainApp().
-  static Future<SharedPreferences> init() async {
-    _prefsInstance = await _instance;
-    return _prefsInstance!;
-  }
-
-  static String? getString(String key) {
-    return _prefsInstance?.getString(key);
-  }
-
-  static Future<bool> setString(String key, String value) async {
-    var prefs = await _instance;
-    return prefs.setString(key, value);
-  }
+  final Preference<bool> invertImages;
+  final Preference<String> hubUrl;
 }

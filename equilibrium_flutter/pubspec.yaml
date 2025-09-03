@@ -39,7 +39,7 @@ dependencies:
   json_annotation: ^4.9.0
   path: ^1.9.1
   provider: ^6.1.5+1
-  shared_preferences: ^2.5.3
+  streaming_shared_preferences: ^2.0.0
   web_socket_channel: ^3.0.3
 
 dev_dependencies:

@@ -7,6 +7,7 @@ import 'package:equilibrium_flutter/models/classes/scene.dart';
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/repositories/api_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import '../models/classes/device.dart';
 
 class NotConnectedException implements Exception {
@@ -19,16 +20,12 @@ class HubConnectionHandler {
 
   ApiRepository? api;
 
-  HubConnectionHandler() {
-    String? storedUri = PreferenceHandler.getString(PreferenceKeys.hubHUrl);
-    if (kDebugMode) {
-      developer.log("Running debug, connecting to sample api", level: 0);
-      api = ApiRepository(baseUri: "192.168.27.51:8000");
-    } else if (kIsWeb) {
+  HubConnectionHandler(String storedUri) {
+    if (kIsWeb) {
       developer.log("Running web ui, connecting to local api", level: 0);
       print("Running web ui, connecting to localhost...");
       api = ApiRepository(baseUri: "${Uri.base.host}:${Uri.base.port}");
-    } else if (storedUri != null) {
+    } else if (storedUri != "") {
       print("Found stored url: $storedUri");
       api = ApiRepository(baseUri: storedUri);
     } else {
@@ -40,7 +37,8 @@ class HubConnectionHandler {
   Future<void> connect(String baseUri) async {
     final testApi = ApiRepository(baseUri: baseUri);
     final info = await testApi.testConnection();
-    PreferenceHandler.setString(PreferenceKeys.hubHUrl, baseUri);
+    final preferences = await StreamingSharedPreferences.instance;
+    preferences.setString(PreferenceKeys.hubUrl, baseUri);
     api = testApi;
   }
 
