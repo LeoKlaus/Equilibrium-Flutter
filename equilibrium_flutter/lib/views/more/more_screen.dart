@@ -47,14 +47,6 @@ class MoreScreen extends StatelessWidget {
           StyledCard(
             leadingTile: Icon(Icons.invert_colors),
             title: "Invert Images in Dark Mode",
-            /*trailingTile: Switch(
-              value:
-                  PreferenceHandler.getBool(PreferenceKeys.invertImages) ??
-                  false,
-              onChanged: (newValue) async {
-                await PreferenceHandler.setBool(PreferenceKeys.invertImages, newValue);
-              },
-            ),*/
             trailingTile: PreferenceBuilder<bool>(preference: settings.invertImages, builder: (context, invertImages) =>
             Switch(
               value: invertImages,
