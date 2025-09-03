@@ -1,4 +1,4 @@
-package com.example.equilibrium_flutter
+package me.wehrfritz.equilibrium_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
