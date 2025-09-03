@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final darkTheme = ThemeData(
+  useMaterial3: true,
   applyElevationOverlayColor: true,
   brightness: Brightness.dark,
   colorScheme: ColorScheme(

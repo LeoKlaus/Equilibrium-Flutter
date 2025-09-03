@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
+  useMaterial3: true,
   applyElevationOverlayColor: false,
   brightness: Brightness.light,
   colorScheme: ColorScheme(

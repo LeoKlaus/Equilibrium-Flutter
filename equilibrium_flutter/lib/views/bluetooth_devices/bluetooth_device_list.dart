@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../helpers/hub_connection_handler.dart';
+import '../subviews/styled_card.dart';
 import '../subviews/tappable_card.dart';
 
 class BluetoothDeviceList extends StatefulWidget {
@@ -48,6 +49,14 @@ class _BluetoothDeviceListState extends State<BluetoothDeviceList> {
     });
   }
 
+  Future<void> enableDiscovery() async {
+    await connectionHandler.api?.advertiseBle();
+  }
+
+  Future<void> pairDevices() async {
+    await connectionHandler.api?.pairDevices();
+  }
+
   List<Widget> connectionStatus(BleDevice device) {
     return [
       device.connected
@@ -69,10 +78,6 @@ class _BluetoothDeviceListState extends State<BluetoothDeviceList> {
         ),
         title: Text('Bluetooth devices'),
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: uploadImage,
-        child: Icon(Icons.add),
-      ),*/
       body: Center(
         child: FutureBuilder<List<BleDevice>>(
           future: devicesFuture,
@@ -107,64 +112,130 @@ class _BluetoothDeviceListState extends State<BluetoothDeviceList> {
     );
   }
 
+  Widget infoAndConnectSection() {
+    return Padding(
+      padding: EdgeInsetsGeometry.all(20),
+      child: Column(
+        spacing: 12,
+        children: [
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
+            child: /*Text(
+              "**** from the Bluetooth settings of your device. For some devices (notably Apple TVs), pairing may not start automatically after connecting. In that case, use the **** ",
+            ),*/ Text.rich(
+              TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                    text:
+                        "To pair Equilibrium to a new Bluetooth device, enable discovery here first and then connect to ",
+                  ),
+                  TextSpan(
+                    text: "Equilibrium Virtual Keyboard",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text:
+                        " from the Bluetooth settings of your device. For some devices (notably Apple TVs), pairing may not start automatically after connecting. In that case, use the ",
+                  ),
+                  TextSpan(
+                    text: "Pair devices",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: " button below to manually initiate pairing."),
+                ],
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: enableDiscovery,
+            child: ListTile(
+              leading: Icon(Icons.search),
+              title: Text("Enable discovery"),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: pairDevices,
+            child: ListTile(
+              leading: Icon(Icons.bluetooth_connected_outlined),
+              title: Text("Pair devices"),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
+            child: Text(
+              "Warning: The Bluetooth integration in Equilibrium should be considered experimental. While connecting to paired devices and controlling them (usually) works reliably, pairing can take a few attempts to work.",
+              style: TextStyle(color: Theme.of(context).disabledColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildDevices(List<BleDevice> devices) {
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 72),
-        itemCount: devices.length,
-        itemBuilder: (context, index) {
-          final device = devices[index];
-          return StyledCard(
-            leadingTile: Icon(Icons.bluetooth),
-            title: device.name,
-            subTitle: device.address,
-            trailingTile: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: connectionStatus(device),
+      child: ListView(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(bottom: 72),
+            itemCount: devices.length,
+            itemBuilder: (context, index) {
+              final device = devices[index];
+              return StyledCard(
+                leadingTile: Icon(Icons.bluetooth),
+                title: device.name,
+                subTitle: device.address,
+                trailingTile: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: connectionStatus(device),
+                    ),
+                    PopupMenuButton(
+                      onSelected: (selection) async {
+                        switch (selection) {
+                          case 1:
+                            await disconnectFromDevices();
+                          case 2:
+                            await connectToDevice(device.address);
+                        }
+                      },
+                      itemBuilder:
+                          (context) => [
+                            device.connected
+                                ? PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.bluetooth_connected),
+                                      SizedBox(width: 10),
+                                      Text("Disconnect from ${device.name}"),
+                                    ],
+                                  ),
+                                )
+                                : PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.bluetooth_connected),
+                                      SizedBox(width: 10),
+                                      Text("Connect to ${device.name}"),
+                                    ],
+                                  ),
+                                ),
+                          ],
+                    ),
+                  ],
                 ),
-                PopupMenuButton(
-                  onSelected: (selection) async {
-                    switch (selection) {
-                      case 1:
-                        await disconnectFromDevices();
-                      case 2:
-                        await connectToDevice(device.address);
-                    }
-                  },
-                  itemBuilder:
-                      (context) => [
-                        device.connected
-                            ? PopupMenuItem(
-                              value: 1,
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.bluetooth_connected),
-                                  SizedBox(width: 10),
-                                  Text("Disconnect from ${device.name}"),
-                                ],
-                              ),
-                            )
-                            : PopupMenuItem(
-                              value: 2,
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.bluetooth_connected),
-                                  SizedBox(width: 10),
-                                  Text("Connect to ${device.name}"),
-                                ],
-                              ),
-                            ),
-                      ],
-                ),
-              ],
-            ),
-          );
-        },
+              );
+            },
+          ),
+          infoAndConnectSection(),
+        ],
       ),
     );
   }

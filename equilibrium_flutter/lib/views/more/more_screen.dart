@@ -5,6 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
+import '../subviews/styled_card.dart';
+
 class MoreScreen extends StatelessWidget {
   MoreScreen({super.key});
 
@@ -47,11 +49,22 @@ class MoreScreen extends StatelessWidget {
           StyledCard(
             leadingTile: Icon(Icons.invert_colors),
             title: "Invert Images in Dark Mode",
-            trailingTile: PreferenceBuilder<bool>(preference: settings.invertImages, builder: (context, invertImages) =>
-            Switch(
-              value: invertImages,
-              onChanged: (newValue) => settings.invertImages.setValue(!invertImages),
-            )
+            trailingTile: PreferenceBuilder<bool>(
+              preference: settings.invertImages,
+              builder:
+                  (context, invertImages) => Switch(
+                    value: invertImages,
+                    onChanged:
+                        (newValue) =>
+                            settings.invertImages.setValue(!invertImages),
+                  ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+            child: Text(
+              "Inverts all images for scenes and devices while in dark mode (works especially well for simple icons).",
+              style: TextStyle(color: Theme.of(context).disabledColor)
             ),
           ),
         ],

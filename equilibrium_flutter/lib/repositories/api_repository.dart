@@ -156,4 +156,14 @@ class ApiRepository {
     final uri = Uri.http(baseUri, "/bluetooth/disconnect");
     await http.post(uri);
   }
+
+  Future<void> advertiseBle() async {
+    final uri = Uri.http(baseUri, "/bluetooth/start_advertisement");
+    await http.post(uri);
+  }
+
+  Future<void> pairDevices() async {
+    final uri = Uri.http(baseUri, "/bluetooth/start_pairing");
+    await http.post(uri);
+  }
 }
