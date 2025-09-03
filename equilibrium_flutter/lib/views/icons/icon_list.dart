@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
+import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -135,10 +136,12 @@ class _IconListState extends State<IconList> {
         itemBuilder: (context, index) {
           final icon = icons[index];
           return StyledCard(
-            leadingTile: Image.network(
-              height: 40,
-              width: 40,
-              "http://${connectionHandler.api?.baseUri ?? ""}/images/${icon.id}",
+            leadingTile: ColorInverted(
+              child: Image.network(
+                height: 40,
+                width: 40,
+                "http://${connectionHandler.api?.baseUri ?? ""}/images/${icon.id}",
+              ),
             ),
             title: icon.filename,
             subTitle: icon.path,
@@ -158,10 +161,11 @@ class _IconListState extends State<IconList> {
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () => {
-                                  Navigator.pop(context, 'Delete'),
-                                  deleteImage(icon.id)
-                                },
+                                onPressed:
+                                    () => {
+                                      Navigator.pop(context, 'Delete'),
+                                      deleteImage(icon.id),
+                                    },
                                 child: const Text(
                                   'Delete',
                                   style: TextStyle(color: Colors.red),

@@ -1,4 +1,6 @@
 import 'package:equilibrium_flutter/bottom_bar.dart';
+import 'package:equilibrium_flutter/themes/dark.dart';
+import 'package:equilibrium_flutter/themes/light.dart';
 import 'package:equilibrium_flutter/views/bluetooth_devices/bluetooth_device_list.dart';
 import 'package:equilibrium_flutter/views/connect_hub/connect_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_detail_screen.dart';
@@ -116,8 +118,8 @@ class StatefulShellApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Equilibrium',
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       routerConfig: _router,
     );
   }

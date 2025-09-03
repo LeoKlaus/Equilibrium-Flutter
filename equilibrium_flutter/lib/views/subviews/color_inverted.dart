@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equilibrium_flutter/helpers/preference_handler.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class ColorInverted extends StatefulWidget {
