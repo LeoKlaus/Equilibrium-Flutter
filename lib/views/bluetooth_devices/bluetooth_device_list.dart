@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../helpers/hub_connection_handler.dart';
 import '../subviews/styled_card.dart';
-import '../subviews/tappable_card.dart';
 
 class BluetoothDeviceList extends StatefulWidget {
   const BluetoothDeviceList({super.key});
