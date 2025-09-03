@@ -10,13 +10,12 @@ class ColorInverted extends StatefulWidget {
 }
 
 class _ColorInvertedState extends State<ColorInverted> {
-  late Brightness brightness = Brightness.light;
+  Brightness brightness = Brightness.light;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     brightness = MediaQuery.of(context).platformBrightness;
-    print("brightness changed to $brightness");
   }
 
   @override
@@ -26,6 +25,7 @@ class _ColorInvertedState extends State<ColorInverted> {
       children: [
       ColorFiltered(
         colorFilter:
+            // TODO: Make this configurable
          brightness == Brightness.dark
             ? const ColorFilter.matrix(<double>[
           -1.0, 0.0, 0.0, 0.0, 255.0, //
