@@ -1,3 +1,4 @@
+import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
 import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -81,11 +82,12 @@ class _SceneListState extends State<SceneList> {
             sceneId: scene.id,
             sceneActiveWidget: CircleAvatar(
               backgroundColor: Colors.green,
-              child: Center(child: Icon(
-                color: Colors.black,
+              child: Center(
+                child: Icon(
+                  color: Colors.black,
                   Icons.power_settings_new,
-                  size: 32
-              )
+                  size: 32,
+                ),
               ),
             ),
             sceneInactiveWidget:
@@ -94,10 +96,12 @@ class _SceneListState extends State<SceneList> {
                       backgroundColor: Colors.grey,
                       child: Center(child: Text(scene.name.substring(0, 1))),
                     )
-                    : Image.network(
-                      height: 40,
-                      width: 40,
-                      "http://192.168.27.51:8000/images/${scene.image?.id}",
+                    : ColorInverted(
+                      child: Image.network(
+                        height: 40,
+                        width: 40,
+                        "http://192.168.27.51:8000/images/${scene.image?.id}",
+                      ),
                     )),
             transitionWidget: CircularProgressIndicator(),
           ),

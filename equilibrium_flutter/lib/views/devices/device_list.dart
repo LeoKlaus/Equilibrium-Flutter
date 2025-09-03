@@ -1,4 +1,5 @@
 import 'package:equilibrium_flutter/models/classes/device.dart';
+import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
 import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -78,10 +79,12 @@ class _DeviceListState extends State<DeviceList> {
           leadingTile:
               device.imageId == null
                   ? Icon(device.type.icon, size: 40)
-                  : Image.network(
-                    height: 40,
-                    width: 40,
-                    "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
+                  : ColorInverted(
+                    child: Image.network(
+                      height: 40,
+                      width: 40,
+                      "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
+                    ),
                   ),
           title: device.name,
           subTitle:

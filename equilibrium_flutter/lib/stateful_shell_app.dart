@@ -15,8 +15,9 @@ import 'helpers/hub_connection_handler.dart';
 
 class StatefulShellApp extends StatelessWidget {
   StatefulShellApp({super.key});
+
   final HubConnectionHandler connectionHandler =
-  GetIt.instance<HubConnectionHandler>();
+      GetIt.instance<HubConnectionHandler>();
 
   late final GoRouter _router = GoRouter(
     routes: <RouteBase>[
@@ -28,10 +29,10 @@ class StatefulShellApp extends StatelessWidget {
       ),
       StatefulShellRoute.indexedStack(
         builder: (
-            BuildContext context,
-            GoRouterState state,
-            StatefulNavigationShell navigationShell,
-            ) {
+          BuildContext context,
+          GoRouterState state,
+          StatefulNavigationShell navigationShell,
+        ) {
           return BottomBar(navigationShell: navigationShell);
         },
         branches: <StatefulShellBranch>[
@@ -47,8 +48,8 @@ class StatefulShellApp extends StatelessWidget {
                     path: "/:sceneId",
                     builder:
                         (context, state) => SceneDetailScreen(
-                      sceneId: int.parse(state.pathParameters['sceneId']!),
-                    ),
+                          sceneId: int.parse(state.pathParameters['sceneId']!),
+                        ),
                   ),
                 ],
               ),
@@ -66,10 +67,10 @@ class StatefulShellApp extends StatelessWidget {
                     path: "/:deviceId",
                     builder:
                         (context, state) => DeviceDetailScreen(
-                      deviceId: int.parse(
-                        state.pathParameters['deviceId']!,
-                      ),
-                    ),
+                          deviceId: int.parse(
+                            state.pathParameters['deviceId']!,
+                          ),
+                        ),
                   ),
                 ],
               ),
@@ -84,14 +85,12 @@ class StatefulShellApp extends StatelessWidget {
                 },
                 routes: <RouteBase>[
                   GoRoute(
-                      path: "/images",
-                      builder:
-                          (context, state) => const IconList()
+                    path: "/images",
+                    builder: (context, state) => const IconList(),
                   ),
                   GoRoute(
-                      path: "/bluetooth_devices",
-                      builder:
-                          (context, state) => const BluetoothDeviceList()
+                    path: "/bluetooth_devices",
+                    builder: (context, state) => const BluetoothDeviceList(),
                   ),
                 ],
               ),
@@ -117,7 +116,8 @@ class StatefulShellApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Equilibrium',
-      theme: ThemeData(primarySwatch: Colors.orange),
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
       routerConfig: _router,
     );
   }

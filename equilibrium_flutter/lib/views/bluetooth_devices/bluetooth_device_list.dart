@@ -1,10 +1,4 @@
-import 'dart:developer' as developer;
-import 'dart:io';
-
 import 'package:equilibrium_flutter/models/classes/ble_device.dart';
-import 'package:equilibrium_flutter/models/classes/user_image.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
