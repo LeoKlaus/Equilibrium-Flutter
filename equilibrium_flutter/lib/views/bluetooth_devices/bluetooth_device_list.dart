@@ -178,6 +178,7 @@ class _BluetoothDeviceListState extends State<BluetoothDeviceList> {
       child: ListView(
         children: [
           ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             padding: EdgeInsets.only(bottom: 72),
             itemCount: devices.length,

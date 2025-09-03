@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equilibrium_flutter/bottom_bar.dart';
 import 'package:equilibrium_flutter/themes/dark.dart';
 import 'package:equilibrium_flutter/themes/light.dart';
@@ -116,11 +117,22 @@ class StatefulShellApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Equilibrium',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      routerConfig: _router,
+    return DynamicColorBuilder(
+      builder: (lightColorScheme, darkColorScheme) {
+        return MaterialApp.router(
+          title: 'Equilibrium',
+          theme:
+              lightColorScheme != null
+                  ? ThemeData(colorScheme: lightColorScheme, useMaterial3: true)
+                  : lightTheme,
+          darkTheme:
+              darkColorScheme != null
+                  ? ThemeData(colorScheme: darkColorScheme, useMaterial3: true)
+                  : darkTheme,
+          themeMode: ThemeMode.system,
+          routerConfig: _router,
+        );
+      },
     );
   }
 }
