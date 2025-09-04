@@ -36,7 +36,7 @@ class HubConnectionHandler {
 
   Future<void> connect(String baseUri) async {
     final testApi = ApiRepository(baseUri: baseUri);
-    final info = await testApi.testConnection();
+    await testApi.testConnection();
     final preferences = await StreamingSharedPreferences.instance;
     preferences.setString(PreferenceKeys.hubUrl, baseUri);
     api = testApi;

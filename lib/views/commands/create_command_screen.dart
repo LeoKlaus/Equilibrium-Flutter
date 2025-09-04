@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/enums/bluetooth_command.dart';
 import 'package:equilibrium_flutter/models/enums/command_group_type.dart';
