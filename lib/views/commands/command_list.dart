@@ -118,8 +118,8 @@ class _CommandListState extends State<CommandList> {
             title: command.name,
             subTitle:
                 command.device?.name != null
-                    ? "${command.device?.name} - ${command.commandGroup.name}"
-                    : command.commandGroup.name,
+                    ? "${command.device?.name} - ${command.commandGroup.name()}"
+                    : command.commandGroup.name(),
             trailingTile: PopupMenuButton(
               onSelected: (selection) async {
                 final id = command.id;

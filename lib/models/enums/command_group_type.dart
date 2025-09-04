@@ -2,26 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 enum CommandGroupType {
-  @JsonValue("volume") volume,
-  @JsonValue("navigation") navigation,
-  @JsonValue("transport") transport,
-  @JsonValue("colored_buttons") coloredButtons,
-  @JsonValue("channel") channel,
-  @JsonValue("power") power,
-  @JsonValue("numeric") numeric,
-  @JsonValue("input") input,
-  @JsonValue("other") other;
+  @JsonValue("power")
+  power,
+  @JsonValue("volume")
+  volume,
+  @JsonValue("navigation")
+  navigation,
+  @JsonValue("transport")
+  transport,
+  @JsonValue("channel")
+  channel,
+  @JsonValue("numeric")
+  numeric,
+  @JsonValue("input")
+  input,
+  @JsonValue("colored_buttons")
+  coloredButtons,
+  @JsonValue("other")
+  other;
 
+  static List<DropdownMenuEntry<CommandGroupType>> dropDownEntries =
+      CommandGroupType.values.map((type) {
+        return DropdownMenuEntry(value: type, label: type.name());
+      }).toList();
 
-  static List<DropdownMenuEntry<CommandGroupType>> dropDownEntries = [
-    DropdownMenuEntry(value: CommandGroupType.power, label: "Power"),
-    DropdownMenuEntry(value: CommandGroupType.volume, label: "Volume"),
-    DropdownMenuEntry(value: CommandGroupType.navigation, label: "Navigation"),
-    DropdownMenuEntry(value: CommandGroupType.transport, label: "Transport"),
-    DropdownMenuEntry(value: CommandGroupType.channel, label: "Channel"),
-    DropdownMenuEntry(value: CommandGroupType.numeric, label: "Numbers"),
-    DropdownMenuEntry(value: CommandGroupType.input, label: "Input"),
-    DropdownMenuEntry(value: CommandGroupType.coloredButtons, label: "Colors"),
-    DropdownMenuEntry(value: CommandGroupType.other, label: "Other")
-  ];
+  String name() {
+    switch (this) {
+      case CommandGroupType.volume:
+        return "Volume";
+      case CommandGroupType.navigation:
+        return "Navigation";
+      case CommandGroupType.transport:
+        return "Transport";
+      case CommandGroupType.coloredButtons:
+        return "Colors";
+      case CommandGroupType.channel:
+        return "Channel";
+      case CommandGroupType.power:
+        return "Power";
+      case CommandGroupType.numeric:
+        return "Numbers";
+      case CommandGroupType.input:
+        return "Input";
+      case CommandGroupType.other:
+        return "Other";
+    }
+  }
 }
