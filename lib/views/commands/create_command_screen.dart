@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import '../../helpers/hub_connection_handler.dart';
 import '../../models/classes/device.dart';
 import '../../models/enums/bluetooth_command_type.dart';
+import '../subviews/device_picker.dart';
 
 class CreateCommandScreen extends StatefulWidget {
   const CreateCommandScreen({super.key});
@@ -24,22 +25,22 @@ class CreateCommandScreen extends StatefulWidget {
 }
 
 class _CreateCommandScreenState extends State<CreateCommandScreen> {
+
   final HubConnectionHandler connectionHandler =
-      GetIt.instance<HubConnectionHandler>();
+  GetIt.instance<HubConnectionHandler>();
 
   late TextEditingController _nameController;
+  late TextEditingController _btCommandKeyController;
+  late TextEditingController _hostController;
+  late TextEditingController _bodyController;
+
   Device? device;
   CommandGroupType group = CommandGroupType.other;
   CommandType type = CommandType.infrared;
   RemoteButton button = RemoteButton.powerToggle;
   BluetoothCommandType btCommandType = BluetoothCommandType.regularKey;
   BluetoothCommand btCommand = BluetoothCommand.enter;
-  late TextEditingController _btCommandKeyController;
-  late TextEditingController _hostController;
   NetworkRequestType networkRequestType = NetworkRequestType.get;
-  late TextEditingController _bodyController;
-
-  late Future<List<Device>> devicesFuture;
 
   Future<void> createCommand() async {
     final command = Command(
@@ -82,7 +83,6 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
   @override
   void initState() {
     super.initState();
-    devicesFuture = connectionHandler.getDevices();
     _nameController = TextEditingController();
     _btCommandKeyController = TextEditingController();
     _hostController = TextEditingController();
@@ -121,7 +121,13 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              devicePicker(),
+              DevicePicker(
+                updateSelection: (selectedDevice) {
+                  setState(() {
+                    device = selectedDevice;
+                  });
+                },
+              ),
               DropdownMenu<CommandGroupType>(
                 width: double.infinity,
                 initialSelection: CommandGroupType.other,
@@ -180,65 +186,6 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
               CommandType.script => buildScriptSection(),
             },
       ),
-    );
-  }
-
-  Widget devicePicker() {
-    return FutureBuilder<List<Device>>(
-      future: devicesFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const ListTile(
-            title: Text("loading devices..."),
-            leading: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasData) {
-          final devices = snapshot.data!;
-          return DropdownMenu<Device?>(
-            width: double.infinity,
-            initialSelection: null,
-            requestFocusOnTap: true,
-            label: const Text('Device'),
-            onSelected: (Device? selectedDevice) {
-              setState(() {
-                device = selectedDevice;
-              });
-            },
-            dropdownMenuEntries: devices.map((device) {
-              return device.toDropDownMenuEntry();
-            }).toList(),
-          );
-        } else if (snapshot.hasError) {
-          return Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              spacing: 20,
-              children: [
-                Text("Error loading devices: ${snapshot.error}"),
-                ElevatedButton(
-                  onPressed: () {
-                    context.go("/connect");
-                  },
-                  child: Text("Check connected hub."),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return DropdownMenu<Device?>(
-            width: double.infinity,
-            initialSelection: null,
-            requestFocusOnTap: true,
-            label: const Text('Device'),
-            onSelected: (Device? selectedDevice) {
-              setState(() {
-                device = selectedDevice;
-              });
-            },
-            dropdownMenuEntries: [],
-          );
-        }
-      },
     );
   }
 
