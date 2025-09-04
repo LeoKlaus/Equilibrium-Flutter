@@ -8,6 +8,7 @@ import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/repositories/api_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import '../models/classes/command.dart';
 import '../models/classes/device.dart';
 
 class NotConnectedException implements Exception {
@@ -23,13 +24,12 @@ class HubConnectionHandler {
   HubConnectionHandler(String storedUri) {
     if (kIsWeb) {
       developer.log("Running web ui, connecting to local api", level: 0);
-      print("Running web ui, connecting to localhost...");
       api = ApiRepository(baseUri: "${Uri.base.host}:${Uri.base.port}");
     } else if (storedUri != "") {
-      print("Found stored url: $storedUri");
+      developer.log("Found stored url: $storedUri");
       api = ApiRepository(baseUri: storedUri);
     } else {
-      print("No URL was stored");
+      developer.log("No URL was stored");
       api = null;
     }
   }
@@ -123,19 +123,28 @@ class HubConnectionHandler {
     }
   }
 
-  Future<void> deleteImage(int? id) async {
+  Future<List<BleDevice>> getBleDevices() async {
     final localApi = api;
     if (localApi != null) {
-      return await localApi.deleteImage(id);
+      return await localApi.getBleDevices();
     } else {
       throw NotConnectedException();
     }
   }
 
-  Future<List<BleDevice>> getBleDevices() async {
+  Future<List<Command>> getCommands() async {
     final localApi = api;
     if (localApi != null) {
-      return await localApi.getBleDevices();
+      return await localApi.getCommands();
+    } else {
+      throw NotConnectedException();
+    }
+  }
+
+  Future<Command> createCommand(Command newCommand) async {
+    final localApi = api;
+    if (localApi != null) {
+      return await localApi.createCommand(newCommand);
     } else {
       throw NotConnectedException();
     }

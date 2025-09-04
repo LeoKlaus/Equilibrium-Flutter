@@ -7,6 +7,7 @@ import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import '../subviews/styled_card.dart';
 
+
 class MoreScreen extends StatelessWidget {
   MoreScreen({super.key});
 
@@ -64,7 +65,7 @@ class MoreScreen extends StatelessWidget {
             padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
             child: Text(
               "Inverts all images for scenes and devices while in dark mode (works especially well for simple icons).",
-              style: TextStyle(color: Theme.of(context).disabledColor)
+              style: TextStyle(color: Theme.of(context).disabledColor),
             ),
           ),
         ],

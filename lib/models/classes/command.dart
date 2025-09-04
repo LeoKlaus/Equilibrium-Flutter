@@ -11,14 +11,18 @@ part 'command.g.dart';
 
 @JsonSerializable()
 class Command {
+  @JsonKey(includeToJson: false)
   int? id;
   String name;
   RemoteButton button;
   CommandType type;
   @JsonKey(name: 'command_group')
   CommandGroupType commandGroup;
-  @JsonKey(name: 'device_id')
-  int? deviceId;
+  @JsonKey(name: 'device_id', includeToJson: false)
+  int? _deviceId;
+  @JsonKey(name: "device_id", includeFromJson: false, includeToJson: true)
+  int? get deviceId => device?.id ?? _deviceId;
+  @JsonKey(includeToJson: false)
   Device? device;
   String? host;
   NetworkRequestType? method;
@@ -27,6 +31,7 @@ class Command {
   String? btAction;
   @JsonKey(name: 'bt_media_action')
   String? btMediaAction;
+  @JsonKey(includeToJson: false)
   List<Macro>? macros;
 
   Command({
@@ -35,7 +40,7 @@ class Command {
     this.button = RemoteButton.other,
     this.type = CommandType.infrared,
     this.commandGroup = CommandGroupType.other,
-    this.deviceId,
+    deviceId,
     this.device,
     this.host,
     this.method,
@@ -43,7 +48,7 @@ class Command {
     this.btAction,
     this.btMediaAction,
     this.macros,
-  });
+  }): _deviceId = deviceId;
 
   factory Command.fromJson(Map<String, dynamic> json) =>
       _$CommandFromJson(json);

@@ -3,6 +3,7 @@ import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/classes/scene.dart';
 import 'package:equilibrium_flutter/models/classes/macro.dart';
+import 'package:flutter/material.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -41,4 +42,8 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeviceToJson(this);
+
+  DropdownMenuEntry<Device> toDropDownMenuEntry() {
+    return DropdownMenuEntry(value: this, label: name);
+  }
 }

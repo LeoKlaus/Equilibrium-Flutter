@@ -18,36 +18,30 @@ Command _$CommandFromJson(Map<String, dynamic> json) => Command(
   commandGroup:
       $enumDecodeNullable(_$CommandGroupTypeEnumMap, json['command_group']) ??
       CommandGroupType.other,
-  deviceId: (json['device_id'] as num?)?.toInt(),
-  device:
-      json['device'] == null
-          ? null
-          : Device.fromJson(json['device'] as Map<String, dynamic>),
+  device: json['device'] == null
+      ? null
+      : Device.fromJson(json['device'] as Map<String, dynamic>),
   host: json['host'] as String?,
   method: $enumDecodeNullable(_$NetworkRequestTypeEnumMap, json['method']),
   body: json['body'] as String?,
   btAction: json['bt_action'] as String?,
   btMediaAction: json['bt_media_action'] as String?,
-  macros:
-      (json['macros'] as List<dynamic>?)
-          ?.map((e) => Macro.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  macros: (json['macros'] as List<dynamic>?)
+      ?.map((e) => Macro.fromJson(e as Map<String, dynamic>))
+      .toList(),
 );
 
 Map<String, dynamic> _$CommandToJson(Command instance) => <String, dynamic>{
-  'id': instance.id,
   'name': instance.name,
   'button': _$RemoteButtonEnumMap[instance.button]!,
   'type': _$CommandTypeEnumMap[instance.type]!,
   'command_group': _$CommandGroupTypeEnumMap[instance.commandGroup]!,
   'device_id': instance.deviceId,
-  'device': instance.device,
   'host': instance.host,
   'method': _$NetworkRequestTypeEnumMap[instance.method],
   'body': instance.body,
   'bt_action': instance.btAction,
   'bt_media_action': instance.btMediaAction,
-  'macros': instance.macros,
 };
 
 const _$RemoteButtonEnumMap = {

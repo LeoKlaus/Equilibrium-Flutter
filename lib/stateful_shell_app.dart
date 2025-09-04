@@ -3,6 +3,8 @@ import 'package:equilibrium_flutter/bottom_bar.dart';
 import 'package:equilibrium_flutter/themes/dark.dart';
 import 'package:equilibrium_flutter/themes/light.dart';
 import 'package:equilibrium_flutter/views/bluetooth_devices/bluetooth_device_list.dart';
+import 'package:equilibrium_flutter/views/commands/command_list.dart';
+import 'package:equilibrium_flutter/views/commands/create_command_screen.dart';
 import 'package:equilibrium_flutter/views/connect_hub/connect_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_detail_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_list.dart';
@@ -94,6 +96,17 @@ class StatefulShellApp extends StatelessWidget {
                   GoRoute(
                     path: "/bluetooth_devices",
                     builder: (context, state) => const BluetoothDeviceList(),
+                  ),
+                  GoRoute(
+                    path: "/commands",
+                    builder: (context, state) => const CommandList(),
+                    routes: <RouteBase>[
+                      GoRoute(
+                        path: "/create",
+                        builder:
+                            (context, state) => const CreateCommandScreen(),
+                      ),
+                    ],
                   ),
                 ],
               ),

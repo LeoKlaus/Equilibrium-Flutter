@@ -1,4 +1,3 @@
-import 'package:equilibrium_flutter/themes/light.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -53,7 +52,7 @@ class ConnectScreen extends StatelessWidget {
                     handleLoginButtonPress(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: lightTheme.primaryColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

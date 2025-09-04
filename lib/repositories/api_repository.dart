@@ -17,6 +17,22 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
+class InvalidResponseException implements Exception {
+
+  final int statusCode;
+  final String? body;
+
+  InvalidResponseException({required this.statusCode,  this.body});
+
+  String errorMessage() {
+    if (body != null) {
+      return "Received an invalid response from the server: $statusCode\n$body";
+    } else {
+      return "Received an invalid response from the server: $statusCode";
+    }
+  }
+}
+
 class ApiRepository {
   String baseUri;
 
@@ -135,7 +151,7 @@ class ApiRepository {
     developer.log("Server responded ${response.statusCode} to file upload");
   }
 
-  Future<void> deleteImage(int? id) async {
+  Future<void> deleteImage(int id) async {
     final uri = Uri.http(baseUri, "/images/$id");
     await http.delete(uri);
   }
@@ -165,5 +181,27 @@ class ApiRepository {
   Future<void> pairDevices() async {
     final uri = Uri.http(baseUri, "/bluetooth/start_pairing");
     await http.post(uri);
+  }
+
+  Future<void> sendCommand(int id) async {
+    final uri = Uri.http(baseUri, "/commands/$id/send");
+    await http.post(uri);
+  }
+
+  Future<void> deleteCommand(int id) async {
+    final uri = Uri.http(baseUri, "/commands/$id");
+    await http.delete(uri);
+  }
+  
+  Future<Command> createCommand(Command newCommand) async {
+    final uri = Uri.http(baseUri, "/commands/");
+    final response = await http.post(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newCommand));
+    developer.log("${response.statusCode}");
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Command.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
   }
 }
