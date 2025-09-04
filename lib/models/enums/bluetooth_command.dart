@@ -81,7 +81,6 @@ enum BluetoothCommand {
 
   static List<DropdownMenuEntry<BluetoothCommand>> dropDownEntries(BluetoothCommandType type) {
     switch (type) {
-
       case BluetoothCommandType.regularKey:
         return [
           DropdownMenuEntry(value: BluetoothCommand.escape, label: "Escape"),

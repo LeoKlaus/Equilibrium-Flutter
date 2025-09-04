@@ -6,23 +6,22 @@ enum NetworkRequestType {
   get,
   @JsonValue("post")
   post,
+  @JsonValue("patch")
+  patch,
   @JsonValue("delete")
   delete,
   @JsonValue("head")
   head,
-  @JsonValue("patch")
-  patch,
   @JsonValue("put")
   put;
 
-  static List<DropdownMenuEntry<NetworkRequestType>> dropDownEntries = [
-    DropdownMenuEntry(value: NetworkRequestType.get, label: "GET"),
-    DropdownMenuEntry(value: NetworkRequestType.post, label: "POST"),
-    DropdownMenuEntry(value: NetworkRequestType.patch, label: "PATCH"),
-    DropdownMenuEntry(value: NetworkRequestType.delete, label: "DELETE"),
-    DropdownMenuEntry(value: NetworkRequestType.head, label: "HEAD"),
-    DropdownMenuEntry(value: NetworkRequestType.put, label: "PUT"),
-  ];
+  static List<DropdownMenuEntry<NetworkRequestType>> dropDownEntries = NetworkRequestType.values.map((value) {
+    return DropdownMenuEntry(value: value, label: value.upperName());
+  }).toList();
+
+  String upperName() {
+    return name.toUpperCase();
+  }
 
   bool canHaveBody() {
     return this == NetworkRequestType.post ||
