@@ -1,9 +1,11 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equilibrium_flutter/bottom_bar.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
+import 'package:equilibrium_flutter/models/classes/scene.dart';
 import 'package:equilibrium_flutter/themes/dark.dart';
 import 'package:equilibrium_flutter/themes/light.dart';
 import 'package:equilibrium_flutter/views/devices/create_device_screen.dart';
+import 'package:equilibrium_flutter/views/scenes/create_scene_screen.dart';
 import 'package:equilibrium_flutter/views/settings/bluetooth_devices/bluetooth_device_list.dart';
 import 'package:equilibrium_flutter/views/settings/commands/command_list.dart';
 import 'package:equilibrium_flutter/views/settings/commands/create_command_screen.dart';
@@ -55,6 +57,33 @@ class StatefulShellApp extends StatelessWidget {
                   return const SceneList();
                 },
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: "/create",
+                    builder: (context, state) {
+                      if (state.extra != null) {
+                        return CreateSceneScreen(
+                          reloadParent: state.extra as Function,
+                        );
+                      } else {
+                        return CreateSceneScreen(reloadParent: () {});
+                      }
+                    },
+                  ),
+                  GoRoute(
+                    path: '/edit',
+                    builder: (context, state) {
+                      if (state.extra != null) {
+                        final (sceneToEdit, reloadParent) =
+                        state.extra as (Scene, Function);
+                        return CreateSceneScreen(
+                          sceneToEdit: sceneToEdit,
+                          reloadParent: reloadParent,
+                        );
+                      } else {
+                        return CreateSceneScreen(reloadParent: () {});
+                      }
+                    },
+                  ),
                   GoRoute(
                     path: "/:sceneId",
                     builder: (context, state) => SceneDetailScreen(

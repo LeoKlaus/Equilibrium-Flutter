@@ -142,7 +142,7 @@ class _CreateDeviceScreenState extends State<CreateDeviceScreen> {
             ),
           ),
           ImagePicker(
-            initialSelection: image,
+            initialSelectionId: image?.id,
             updateSelection: (selectedImage) {
               setState(() {
                 image = selectedImage;

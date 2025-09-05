@@ -214,6 +214,11 @@ class ApiRepository {
     await http.delete(uri);
   }
 
+  Future<void> deleteScene(int id) async {
+    final uri = Uri.http(baseUri, "/scenes/$id");
+    await http.delete(uri);
+  }
+
   Future<void> executeMacro(int id) async {
     final uri = Uri.http(baseUri, "/macros/$id/execute");
     await http.post(uri);
@@ -255,10 +260,31 @@ class ApiRepository {
   Future<Device> updateDevice(int id, Device newDevice) async {
     final uri = Uri.http(baseUri, "/devices/$id");
     final response = await http.patch(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newDevice));
-    print("sent: ${jsonEncode(newDevice)}");
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       final body = json.decode(response.body);
       return Device.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<Scene> createScene(Scene newScene) async {
+    final uri = Uri.http(baseUri, "/scenes/");
+    final response = await http.post(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newScene));
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Scene.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<Scene> updateScene(int id, Scene newScene) async {
+    final uri = Uri.http(baseUri, "/scenes/$id");
+    final response = await http.patch(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newScene));
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Scene.fromJson(body);
     } else {
       throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
     }

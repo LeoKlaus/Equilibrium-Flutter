@@ -32,12 +32,11 @@ Scene _$SceneFromJson(Map<String, dynamic> json) => Scene(
 Map<String, dynamic> _$SceneToJson(Scene instance) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,
-  'devices': instance.devices,
+  'device_ids': instance.deviceIds,
   'image_id': instance.imageId,
-  'image': instance.image,
-  'start_macro': instance.startMacro,
-  'stop_macro': instance.stopMacro,
-  'macros': instance.macros,
+  'start_macro_id': instance.startMacroId,
+  'stop_macro_id': instance.stopMacroId,
+  'macro_ids': instance.macroIds,
   'bluetooth_address': instance.bluetoothAddress,
   'keymap': instance.keymap,
 };

@@ -1,7 +1,7 @@
 import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/classes/scene.dart';
-
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'macro.g.dart';
@@ -33,4 +33,11 @@ class Macro {
   factory Macro.fromJson(Map<String, dynamic> json) => _$MacroFromJson(json);
 
   Map<String, dynamic> toJson() => _$MacroToJson(this);
+
+  DropdownMenuEntry<Macro?> toDropDownMenuEntry() {
+    return DropdownMenuEntry(
+      value: this,
+      label: name ?? "Unnamed macro",
+    );
+  }
 }

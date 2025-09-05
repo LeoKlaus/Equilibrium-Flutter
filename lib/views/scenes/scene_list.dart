@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
 import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,11 @@ class _SceneListState extends State<SceneList> {
     setState(() {
       scenesFuture = Future.value(scenes);
     });
+  }
+
+  void deleteScene(int id) async {
+    await connectionHandler.api?.deleteScene(id);
+    await _refresh();
   }
 
   @override
@@ -126,20 +133,83 @@ class _SceneListState extends State<SceneList> {
                     .toList()
                     .join(" - ") ??
                 "",
-            trailingTile: StatusInjected(
-              sceneId: scene.id,
-              sceneActiveWidget: ElevatedButton(
-                child: Text('Stop'),
-                onPressed: () {
-                  connectionHandler.stopCurrentScene();
-                },
-              ),
-              sceneInactiveWidget: ElevatedButton(
-                child: Text('Start'),
-                onPressed: () {
-                  connectionHandler.startScene(scene.id!);
-                },
-              ),
+            trailingTile: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StatusInjected(
+                  sceneId: scene.id,
+                  sceneActiveWidget: ElevatedButton(
+                    child: Text('Stop'),
+                    onPressed: () {
+                      connectionHandler.stopCurrentScene();
+                    },
+                  ),
+                  sceneInactiveWidget: ElevatedButton(
+                    child: Text('Start'),
+                    onPressed: () {
+                      connectionHandler.startScene(scene.id!);
+                    },
+                  ),
+                ),
+                PopupMenuButton(
+                  onSelected: (selection) {
+                    final id = scene.id;
+                    if (id != null) {
+                      switch (selection) {
+                        case 1:
+                          GoRouter.of(context).go("/scenes/edit", extra: (scene, _refresh));
+                        case 2:
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text('Delete ${scene.name}?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Delete'),
+                                    deleteScene(id),
+                                  },
+                                  child: const Text(
+                                    'Delete',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                      }
+                    } else {
+                      developer.log("Couldn't get scene id");
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit),
+                          SizedBox(width: 10),
+                          const Text("Edit"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete, color: Colors.red),
+                          SizedBox(width: 10),
+                          const Text("Delete", style: TextStyle(color: Colors.red)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           );
         },

@@ -4,54 +4,55 @@ import 'package:go_router/go_router.dart';
 import 'package:collection/collection.dart';
 
 import '../../helpers/hub_connection_handler.dart';
-import '../../models/classes/user_image.dart';
+import '../../models/classes/macro.dart';
 
-class ImagePicker extends StatefulWidget {
+class MacroPicker extends StatefulWidget {
 
+  final String? label;
   final int? initialSelectionId;
-  final Function(UserImage?) updateSelection;
+  final Function(Macro?) updateSelection;
 
-  const ImagePicker({super.key, required this.updateSelection, this.initialSelectionId});
+  const MacroPicker({super.key, required this.updateSelection, this.initialSelectionId, this.label});
 
   @override
-  State<StatefulWidget> createState() => _ImagePickerState();
+  State<StatefulWidget> createState() => _MacroPickerState();
 }
 
-class _ImagePickerState extends State<ImagePicker> {
+class _MacroPickerState extends State<MacroPicker> {
 
   final HubConnectionHandler connectionHandler =
   GetIt.instance<HubConnectionHandler>();
 
-  late Future<List<UserImage>> iconsFuture;
+  late Future<List<Macro>> macrosFuture;
 
   @override
   void initState() {
     super.initState();
-    iconsFuture = connectionHandler.getImages();
+    macrosFuture = connectionHandler.getMacros();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<UserImage>>(
-      future: iconsFuture,
+    return FutureBuilder<List<Macro>>(
+      future: macrosFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const ListTile(
-            title: Text("loading images..."),
+            title: Text("loading macros..."),
             leading: CircularProgressIndicator(),
           );
         } else if (snapshot.hasData) {
-          final icons = snapshot.data!;
-          return DropdownMenu<UserImage?>(
+          final macros = snapshot.data!;
+          return DropdownMenu<Macro?>(
             width: double.infinity,
-            initialSelection: icons.firstWhereOrNull((icon) => icon.id == widget.initialSelectionId),
+            initialSelection: macros.firstWhereOrNull((macro) => macro.id == widget.initialSelectionId),
             requestFocusOnTap: false,
-            label: const Text('Select image'),
+            label: Text(widget.label ??'Select macro'),
             onSelected: widget.updateSelection,
-            dropdownMenuEntries: icons.map((icon) {
-              return icon.toDropDownMenuEntry(connectionHandler.api?.baseUri);
+            dropdownMenuEntries: macros.map((macro) {
+              return macro.toDropDownMenuEntry();
             }).toList()+
-                [DropdownMenuEntry<UserImage?>(value: null, label: "None")],
+                [DropdownMenuEntry<Macro?>(value: null, label: "None")],
           );
         } else if (snapshot.hasError) {
           return Padding(
@@ -70,7 +71,7 @@ class _ImagePickerState extends State<ImagePicker> {
             ),
           );
         } else {
-          return DropdownMenu<UserImage?>(
+          return DropdownMenu<Macro?>(
             width: double.infinity,
             initialSelection: null,
             requestFocusOnTap: false,
