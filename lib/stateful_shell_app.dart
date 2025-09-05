@@ -123,8 +123,9 @@ class StatefulShellApp extends StatelessWidget {
                         path: "/create",
                         builder: (context, state) {
                           if (state.extra != null) {
-                            final function = state.extra as Function;
-                            return CreateMacroScreen(reloadParent: function);
+                            return CreateMacroScreen(
+                              reloadParent: state.extra as Function,
+                            );
                           } else {
                             return CreateMacroScreen(reloadParent: () {});
                           }
@@ -133,15 +134,16 @@ class StatefulShellApp extends StatelessWidget {
                       GoRoute(
                         path: '/edit',
                         builder: (context, state) {
-                          final (
-                            macroToEdit,
-                            reloadParent,
-                          ) = state.extra
-                              as (Macro, Function);
-                          return CreateMacroScreen(
-                            macroToEdit: macroToEdit,
-                            reloadParent: reloadParent,
-                          );
+                          if (state.extra != null) {
+                            final (macroToEdit, reloadParent) =
+                                state.extra as (Macro, Function);
+                            return CreateMacroScreen(
+                              macroToEdit: macroToEdit,
+                              reloadParent: reloadParent,
+                            );
+                          } else {
+                            return CreateMacroScreen(reloadParent: () {});
+                          }
                         },
                       ),
                     ],
