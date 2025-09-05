@@ -31,17 +31,12 @@ Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
 );
 
 Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
-  'id': instance.id,
   'name': instance.name,
   'manufacturer': instance.manufacturer,
   'model': instance.model,
   'type': _$DeviceTypeEnumMap[instance.type]!,
   'bluetooth_address': instance.bluetoothAddress,
   'image_id': instance.imageId,
-  'image': instance.image,
-  'commands': instance.commands,
-  'scenes': instance.scenes,
-  'macros': instance.macros,
 };
 
 const _$DeviceTypeEnumMap = {

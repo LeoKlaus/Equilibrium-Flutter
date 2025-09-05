@@ -23,4 +23,24 @@ enum DeviceType {
         return Icons.device_unknown;
     }
   }
+
+  static List<DropdownMenuEntry<DeviceType>> dropDownEntries =
+  DeviceType.values.map((type) {
+    return DropdownMenuEntry(value: type, label: type.name());
+  }).toList();
+
+  String name() {
+    switch (this) {
+      case DeviceType.display:
+        return "Display";
+      case DeviceType.amplifier:
+        return "Amplifier";
+      case DeviceType.player:
+        return "Player";
+      case DeviceType.integration:
+        return "Integration";
+      case DeviceType.other:
+        return "Other";
+    }
+  }
 }

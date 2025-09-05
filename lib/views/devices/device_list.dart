@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
 import 'package:equilibrium_flutter/views/subviews/tappable_card.dart';
@@ -33,6 +35,11 @@ class _DeviceListState extends State<DeviceList> {
     setState(() {
       devicesFuture = Future.value(devices);
     });
+  }
+
+  void deleteDevice(int id) async {
+    await connectionHandler.api?.deleteDevice(id);
+    await _refresh();
   }
 
   @override
@@ -91,19 +98,80 @@ class _DeviceListState extends State<DeviceList> {
             onTap: () {
               GoRouter.of(context).go("/devices/${device.id}");
             },
-            leadingTile: device.imageId == null
+            leadingTile: device.image?.id == null
                 ? Icon(device.type.icon, size: 40)
                 : ColorInverted(
                     child: Image.network(
                       height: 40,
                       width: 40,
-                      "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
+                      "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.image?.id}",
+                      errorBuilder: (context, object, stacktrace) {
+                        return Icon(Icons.error, size: 40, color: Colors.red,);
+                      },
                     ),
                   ),
             title: device.name,
             subTitle: device.manufacturer == null
                 ? device.model ?? ""
                 : "${device.manufacturer ?? ""} ${device.model ?? ""}",
+            trailingTile: PopupMenuButton(
+              onSelected: (selection) {
+                final id = device.id;
+                if (id != null) {
+                  switch (selection) {
+                    case 1:
+                      GoRouter.of(context).go("/devices/edit", extra: (device, _refresh));
+                    case 2:
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text('Delete ${device.name}?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => {
+                                Navigator.pop(context, 'Delete'),
+                                deleteDevice(id),
+                              },
+                              child: const Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                  }
+                } else {
+                  developer.log("Couldn't get device id");
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.edit),
+                      SizedBox(width: 10),
+                      const Text("Edit"),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Row(
+                    children: [
+                      const Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 10),
+                      const Text("Delete", style: TextStyle(color: Colors.red)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

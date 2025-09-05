@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/material.dart';
 
 part 'ble_device.g.dart';
 
@@ -16,7 +17,12 @@ class BleDevice {
     this.paired = false,
   });
 
-  factory BleDevice.fromJson(Map<String, dynamic> json) => _$BleDeviceFromJson(json);
+  factory BleDevice.fromJson(Map<String, dynamic> json) =>
+      _$BleDeviceFromJson(json);
 
   Map<String, dynamic> toJson() => _$BleDeviceToJson(this);
+
+  DropdownMenuEntry<BleDevice?> toDropDownMenuEntry() {
+    return DropdownMenuEntry(value: this, label: name);
+  }
 }

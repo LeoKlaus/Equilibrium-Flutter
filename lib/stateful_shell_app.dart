@@ -1,7 +1,9 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equilibrium_flutter/bottom_bar.dart';
+import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/themes/dark.dart';
 import 'package:equilibrium_flutter/themes/light.dart';
+import 'package:equilibrium_flutter/views/devices/create_device_screen.dart';
 import 'package:equilibrium_flutter/views/settings/bluetooth_devices/bluetooth_device_list.dart';
 import 'package:equilibrium_flutter/views/settings/commands/command_list.dart';
 import 'package:equilibrium_flutter/views/settings/commands/create_command_screen.dart';
@@ -71,6 +73,33 @@ class StatefulShellApp extends StatelessWidget {
                   return const DeviceList();
                 },
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: "/create",
+                    builder: (context, state) {
+                      if (state.extra != null) {
+                        return CreateDeviceScreen(
+                          reloadParent: state.extra as Function,
+                        );
+                      } else {
+                        return CreateDeviceScreen(reloadParent: () {});
+                      }
+                    },
+                  ),
+                  GoRoute(
+                    path: '/edit',
+                    builder: (context, state) {
+                      if (state.extra != null) {
+                        final (deviceToEdit, reloadParent) =
+                        state.extra as (Device, Function);
+                        return CreateDeviceScreen(
+                          deviceToEdit: deviceToEdit,
+                          reloadParent: reloadParent,
+                        );
+                      } else {
+                        return CreateDeviceScreen(reloadParent: () {});
+                      }
+                    },
+                  ),
                   GoRoute(
                     path: "/:deviceId",
                     builder: (context, state) => DeviceDetailScreen(

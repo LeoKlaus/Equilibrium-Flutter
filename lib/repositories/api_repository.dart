@@ -209,6 +209,11 @@ class ApiRepository {
     await http.delete(uri);
   }
 
+  Future<void> deleteDevice(int id) async {
+    final uri = Uri.http(baseUri, "/devices/$id");
+    await http.delete(uri);
+  }
+
   Future<void> executeMacro(int id) async {
     final uri = Uri.http(baseUri, "/macros/$id/execute");
     await http.post(uri);
@@ -231,6 +236,29 @@ class ApiRepository {
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       final body = json.decode(response.body);
       return Macro.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<Device> createDevice(Device newDevice) async {
+    final uri = Uri.http(baseUri, "/devices/");
+    final response = await http.post(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newDevice));
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Device.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<Device> updateDevice(int id, Device newDevice) async {
+    final uri = Uri.http(baseUri, "/devices/$id");
+    final response = await http.patch(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newDevice));
+    print("sent: ${jsonEncode(newDevice)}");
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Device.fromJson(body);
     } else {
       throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
     }

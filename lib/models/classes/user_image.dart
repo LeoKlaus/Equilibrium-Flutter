@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/material.dart';
 
 part 'user_image.g.dart';
 
@@ -14,4 +15,12 @@ class UserImage {
       _$UserImageFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserImageToJson(this);
+
+  DropdownMenuEntry<UserImage?> toDropDownMenuEntry(String? baseUri) {
+    return DropdownMenuEntry(
+      value: this,
+      label: filename,
+      leadingIcon: Image.network("http://$baseUri/images/$id", width: 32, height: 32),
+    );
+  }
 }

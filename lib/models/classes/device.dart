@@ -11,6 +11,7 @@ part 'device.g.dart';
 
 @JsonSerializable()
 class Device {
+  @JsonKey(includeToJson: false)
   int? id;
   String name = "";
   String? manufacturer;
@@ -20,9 +21,13 @@ class Device {
   String? bluetoothAddress;
   @JsonKey(name: 'image_id')
   int? imageId;
+  @JsonKey(includeToJson: false)
   UserImage? image;
+  @JsonKey(includeToJson: false)
   List<Command>? commands;
+  @JsonKey(includeToJson: false)
   List<Scene>? scenes;
+  @JsonKey(includeToJson: false)
   List<Macro>? macros;
 
   Device({

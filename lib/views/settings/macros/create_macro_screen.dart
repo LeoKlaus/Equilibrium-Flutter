@@ -69,10 +69,10 @@ class _CreateMacroState extends State<CreateMacroScreen> {
         id,
         newMacro,
       );
-      developer.log("Created command ${createdMacro?.name ?? ""}");
+      developer.log("Created macro ${createdMacro?.name ?? ""}");
     } else {
       final updatedMacro = await connectionHandler.api?.createMacro(newMacro);
-      developer.log("Created command ${updatedMacro?.name}");
+      developer.log("Updated macro ${updatedMacro?.name}");
     }
     if (mounted) {
       widget.reloadParent();
@@ -93,6 +93,8 @@ class _CreateMacroState extends State<CreateMacroScreen> {
     _nameController = TextEditingController(text: widget.macroToEdit?.name);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +103,7 @@ class _CreateMacroState extends State<CreateMacroScreen> {
           icon: Icon(Icons.close),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('New Macro'),
+        title: Text(widget.macroToEdit?.name ?? 'New Macro'),
       ),
       body: ListView(
         padding: EdgeInsetsGeometry.all(16),
