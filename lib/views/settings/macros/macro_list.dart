@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../helpers/hub_connection_handler.dart';
-import '../subviews/styled_card.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/views/subviews/styled_card.dart';
 
 class MacroList extends StatefulWidget {
   const MacroList({super.key});
@@ -53,7 +53,7 @@ class _MacroListState extends State<MacroList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          GoRouter.of(context).go("/more/macros/create", extra: _refresh);
+          GoRouter.of(context).go("/settings/macros/create", extra: _refresh);
         },
         child: Icon(Icons.add),
       ),
@@ -111,7 +111,7 @@ class _MacroListState extends State<MacroList> {
                     case 1:
                       connectionHandler.api?.executeMacro(id);
                     case 2:
-                      GoRouter.of(context).go("/more/macros/edit", extra: (macro, _refresh));
+                      GoRouter.of(context).go("/settings/macros/edit", extra: (macro, _refresh));
                     case 3:
                       showDialog<String>(
                         context: context,

@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../models/classes/command.dart';
+import 'package:equilibrium_flutter/models/classes/command.dart';
 
 class CreateIrCommandButton extends StatefulWidget {
   final TextEditingController nameController;

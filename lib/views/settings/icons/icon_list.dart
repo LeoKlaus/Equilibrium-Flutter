@@ -1,58 +1,82 @@
 import 'dart:developer' as developer;
+import 'dart:io';
 
-import 'package:equilibrium_flutter/models/classes/command.dart';
-import 'package:equilibrium_flutter/models/enums/remote_button.dart';
+import 'package:equilibrium_flutter/models/classes/user_image.dart';
+import 'package:equilibrium_flutter/views/subviews/color_inverted.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../helpers/hub_connection_handler.dart';
-import '../subviews/styled_card.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/views/subviews/styled_card.dart';
 
-class CommandList extends StatefulWidget {
-  const CommandList({super.key});
+class IconList extends StatefulWidget {
+  const IconList({super.key});
 
   @override
-  State<CommandList> createState() => _CommandListState();
+  State<IconList> createState() => _IconListState();
 }
 
-class _CommandListState extends State<CommandList> {
+class _IconListState extends State<IconList> {
   final HubConnectionHandler connectionHandler =
       GetIt.instance<HubConnectionHandler>();
 
-  late Future<List<Command>> commandsFuture;
+  late Future<List<UserImage>> iconsFuture;
 
-  _CommandListState();
+  _IconListState();
+
+  void uploadImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ["jpg", "png", "webp"],
+    );
+
+    if (result != null) {
+      if (kIsWeb) {
+        final file = result.files.single;
+        if (file.bytes != null && file.path != null) {
+          await connectionHandler.uploadImageWeb(
+            file.bytes as List<int>,
+            file.path!,
+          );
+        } else {
+          developer.log("Couldn't access file");
+        }
+      } else {
+        String? path = result.files.single.path;
+        if (path != null) {
+          File file = File(path);
+          await connectionHandler.uploadImage(file);
+        } else {
+          developer.log("Couldn't access file");
+        }
+      }
+
+      await _refresh();
+    } else {
+      developer.log("File picker closed without selection");
+    }
+  }
+
+  void deleteImage(int id) async {
+    await connectionHandler.api?.deleteImage(id);
+    await _refresh();
+  }
 
   Future<void> _refresh() async {
-    List<Command> commands = await connectionHandler.getCommands();
+    List<UserImage> images = await connectionHandler.getImages();
     setState(() {
-      commandsFuture = Future.value(commands);
+      iconsFuture = Future.value(images);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    commandsFuture = connectionHandler.getCommands();
-  }
-
-  @override
-  void didUpdateWidget(covariant CommandList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    commandsFuture = connectionHandler.getCommands();
-    developer.log("Updated widget!");
-  }
-
-  Future<void> sendCommand(int id) async {
-    await connectionHandler.api?.sendCommand(id);
-  }
-
-  Future<void> deleteCommand(int id) async {
-    await connectionHandler.api?.deleteCommand(id);
-    setState(() {
-      commandsFuture = connectionHandler.getCommands();
-    });
+    iconsFuture = connectionHandler.getImages();
   }
 
   @override
@@ -63,23 +87,21 @@ class _CommandListState extends State<CommandList> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Commands'),
+        title: Text('Icons'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          GoRouter.of(context).go("/more/commands/create", extra: _refresh);
-        },
+        onPressed: uploadImage,
         child: Icon(Icons.add),
       ),
       body: Center(
-        child: FutureBuilder<List<Command>>(
-          future: commandsFuture,
+        child: FutureBuilder<List<UserImage>>(
+          future: iconsFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasData) {
-              final commands = snapshot.data!;
-              return buildCommands(commands);
+              final icons = snapshot.data!;
+              return buildIcons(icons);
             } else if (snapshot.hasError) {
               return Padding(
                 padding: EdgeInsets.all(16),
@@ -105,34 +127,35 @@ class _CommandListState extends State<CommandList> {
     );
   }
 
-  Widget buildCommands(List<Command> commands) {
+  Widget buildIcons(List<UserImage> icons) {
     return RefreshIndicator(
       onRefresh: _refresh,
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 72),
-        itemCount: commands.length,
+        itemCount: icons.length,
         itemBuilder: (context, index) {
-          final command = commands[index];
+          final icon = icons[index];
           return StyledCard(
-            leadingTile: RemoteButton.icon(command.button),
-            title: command.name,
-            subTitle:
-                command.device?.name != null
-                    ? "${command.device?.name} - ${command.commandGroup.name()}"
-                    : command.commandGroup.name(),
+            leadingTile: ColorInverted(
+              child: Image.network(
+                height: 40,
+                width: 40,
+                "http://${connectionHandler.api?.baseUri ?? ""}/images/${icon.id}",
+              ),
+            ),
+            title: icon.filename,
+            subTitle: icon.path,
             trailingTile: PopupMenuButton(
-              onSelected: (selection) async {
-                final id = command.id;
+              onSelected: (selection) {
+                final id = icon.id;
                 if (id != null) {
                   switch (selection) {
                     case 1:
-                      await sendCommand(id);
-                    case 2:
                       showDialog<String>(
                         context: context,
                         builder:
                             (BuildContext context) => AlertDialog(
-                              title: Text('Delete ${command.name}?'),
+                              title: Text('Delete ${icon.filename}?'),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed:
@@ -143,7 +166,7 @@ class _CommandListState extends State<CommandList> {
                                   onPressed:
                                       () => {
                                         Navigator.pop(context, 'Delete'),
-                                        deleteCommand(id),
+                                        deleteImage(id),
                                       },
                                   child: const Text(
                                     'Delete',
@@ -155,23 +178,14 @@ class _CommandListState extends State<CommandList> {
                       );
                   }
                 } else {
-                  developer.log("Couldn't get command id");
+                  developer.log("Couldn't get icon id");
                 }
               },
               itemBuilder:
                   (context) => [
                     PopupMenuItem(
                       value: 1,
-                      child: Row(
-                        children: [
-                          const Icon(Icons.send),
-                          SizedBox(width: 10),
-                          Text("Send ${command.name}"),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 2,
+                      // row with 2 children
                       child: Row(
                         children: [
                           const Icon(Icons.delete, color: Colors.red),

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../helpers/hub_connection_handler.dart';
-import '../../models/classes/command.dart';
-import '../../models/classes/macro.dart';
-import '../subviews/styled_card.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/models/classes/command.dart';
+import 'package:equilibrium_flutter/models/classes/macro.dart';
+import 'package:equilibrium_flutter/views/subviews/styled_card.dart';
 import 'package:flutter/services.dart';
 
 class CreateMacroScreen extends StatefulWidget {
@@ -76,7 +76,7 @@ class _CreateMacroState extends State<CreateMacroScreen> {
     }
     if (mounted) {
       widget.reloadParent();
-      GoRouter.of(context).go("/more/macros");
+      GoRouter.of(context).go("/settings/macros");
     }
   }
 

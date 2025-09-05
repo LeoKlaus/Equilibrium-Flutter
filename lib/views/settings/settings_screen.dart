@@ -8,41 +8,41 @@ import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import '../subviews/styled_card.dart';
 
 
-class MoreScreen extends StatelessWidget {
-  MoreScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  SettingsScreen({super.key});
 
   final EquilibriumSettings settings = GetIt.instance<EquilibriumSettings>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('More')),
+      appBar: AppBar(title: Text('Settings')),
       body: ListView(
         children: [
           TappableCard(
             onTap: () {
-              GoRouter.of(context).go("/more/images/");
+              GoRouter.of(context).go("/settings/images/");
             },
             leadingTile: Icon(Icons.image, size: 32),
             title: "Icons",
           ),
           TappableCard(
             onTap: () {
-              GoRouter.of(context).go("/more/bluetooth_devices/");
+              GoRouter.of(context).go("/settings/bluetooth_devices/");
             },
             leadingTile: Icon(Icons.bluetooth, size: 32),
             title: "Bluetooth Devices",
           ),
           TappableCard(
             onTap: () {
-              GoRouter.of(context).go("/more/commands/");
+              GoRouter.of(context).go("/settings/commands/");
             },
             leadingTile: Icon(Icons.code, size: 32),
             title: "Commands",
           ),
           TappableCard(
             onTap: () {
-              GoRouter.of(context).go("/more/macros/");
+              GoRouter.of(context).go("/settings/macros/");
             },
             leadingTile: Icon(Icons.keyboard_command_key, size: 32),
             title: "Macros",

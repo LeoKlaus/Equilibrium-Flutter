@@ -7,15 +7,15 @@ import 'package:equilibrium_flutter/models/enums/command_type.dart';
 import 'package:equilibrium_flutter/models/enums/network_request_type.dart';
 import 'package:equilibrium_flutter/models/enums/remote_button.dart';
 import 'package:equilibrium_flutter/repositories/api_repository.dart';
-import 'package:equilibrium_flutter/views/commands/create_ir_command_button.dart';
+import 'package:equilibrium_flutter/views/settings/commands/create_ir_command_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../helpers/hub_connection_handler.dart';
-import '../../models/classes/device.dart';
-import '../../models/enums/bluetooth_command_type.dart';
-import '../subviews/device_picker.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/models/classes/device.dart';
+import 'package:equilibrium_flutter/models/enums/bluetooth_command_type.dart';
+import 'package:equilibrium_flutter/views/subviews/device_picker.dart';
 
 class CreateCommandScreen extends StatefulWidget {
   final Function reloadParent;
@@ -74,7 +74,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
       developer.log("Created command ${createdCommand.name}");
       if (mounted) {
         widget.reloadParent();
-        GoRouter.of(context).go("/more/commands");
+        GoRouter.of(context).go("/settings/commands");
       }
     } on NotConnectedException {
       developer.log("No hub connected");
@@ -180,7 +180,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
                   commandGroup: group,
                   button: button,
                   doneCallback: () {
-                    GoRouter.of(context).go("/more/commands");
+                    GoRouter.of(context).go("/settings/commands");
                   },
                 ),
               ],

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../helpers/hub_connection_handler.dart';
-import '../subviews/styled_card.dart';
+import 'package:equilibrium_flutter/helpers/hub_connection_handler.dart';
+import 'package:equilibrium_flutter/views/subviews/styled_card.dart';
 
 class BluetoothDeviceList extends StatefulWidget {
   const BluetoothDeviceList({super.key});

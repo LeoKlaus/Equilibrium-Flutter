@@ -2,16 +2,16 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equilibrium_flutter/bottom_bar.dart';
 import 'package:equilibrium_flutter/themes/dark.dart';
 import 'package:equilibrium_flutter/themes/light.dart';
-import 'package:equilibrium_flutter/views/bluetooth_devices/bluetooth_device_list.dart';
-import 'package:equilibrium_flutter/views/commands/command_list.dart';
-import 'package:equilibrium_flutter/views/commands/create_command_screen.dart';
+import 'package:equilibrium_flutter/views/settings/bluetooth_devices/bluetooth_device_list.dart';
+import 'package:equilibrium_flutter/views/settings/commands/command_list.dart';
+import 'package:equilibrium_flutter/views/settings/commands/create_command_screen.dart';
 import 'package:equilibrium_flutter/views/connect_hub/connect_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_detail_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_list.dart';
-import 'package:equilibrium_flutter/views/icons/icon_list.dart';
-import 'package:equilibrium_flutter/views/macros/create_macro_screen.dart';
-import 'package:equilibrium_flutter/views/macros/macro_list.dart';
-import 'package:equilibrium_flutter/views/more/more_screen.dart';
+import 'package:equilibrium_flutter/views/settings/icons/icon_list.dart';
+import 'package:equilibrium_flutter/views/settings/macros/create_macro_screen.dart';
+import 'package:equilibrium_flutter/views/settings/macros/macro_list.dart';
+import 'package:equilibrium_flutter/views/settings/settings_screen.dart';
 import 'package:equilibrium_flutter/views/scenes/scene_detail_screen.dart';
 import 'package:equilibrium_flutter/views/scenes/scene_list.dart';
 import 'package:flutter/material.dart';
@@ -84,9 +84,9 @@ class StatefulShellApp extends StatelessWidget {
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: '/more',
+                path: '/settings',
                 builder: (BuildContext context, GoRouterState state) {
-                  return MoreScreen();
+                  return SettingsScreen();
                 },
                 routes: <RouteBase>[
                   GoRoute(

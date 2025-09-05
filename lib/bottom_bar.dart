@@ -18,7 +18,7 @@ class BottomBar extends StatelessWidget {
             label: "Scenes",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.devices), label: "Devices"),
-          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: "More"),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
         ],
         currentIndex: navigationShell.currentIndex,
         onTap: (int tappedIndex) {
