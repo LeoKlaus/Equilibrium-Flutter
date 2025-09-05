@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/models/enums/device_type.dart';
-import 'package:equilibrium_flutter/views/devices/bluetooth_device_picker.dart';
+import 'package:equilibrium_flutter/views/subviews/bluetooth_device_picker.dart';
 import 'package:equilibrium_flutter/views/subviews/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
