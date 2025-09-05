@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 
-import 'package:equilibrium_flutter/models/classes/ble_device.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/models/enums/device_type.dart';
