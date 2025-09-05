@@ -16,8 +16,11 @@ class CreateMacroScreen extends StatefulWidget {
 
   final Macro? macroToEdit;
 
-  const CreateMacroScreen(
-      {super.key, this.macroToEdit, required this.reloadParent});
+  const CreateMacroScreen({
+    super.key,
+    this.macroToEdit,
+    required this.reloadParent,
+  });
 
   @override
   State<StatefulWidget> createState() => _CreateMacroState();
@@ -25,7 +28,7 @@ class CreateMacroScreen extends StatefulWidget {
 
 class _CreateMacroState extends State<CreateMacroScreen> {
   final HubConnectionHandler connectionHandler =
-  GetIt.instance<HubConnectionHandler>();
+      GetIt.instance<HubConnectionHandler>();
 
   late TextEditingController _nameController;
 
@@ -38,11 +41,13 @@ class _CreateMacroState extends State<CreateMacroScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
-              "Number of delays and commands don't match, this is a bug."),
+            "Number of delays and commands don't match, this is a bug.",
+          ),
         ),
       );
       developer.log(
-          "Commands: ${commands.length}, delays: ${delayControllers.length}");
+        "Commands: ${commands.length}, delays: ${delayControllers.length}",
+      );
       return;
     }
 
@@ -57,7 +62,6 @@ class _CreateMacroState extends State<CreateMacroScreen> {
         return 0;
       }
     }).toList();
-
 
     final id = widget.macroToEdit?.id;
     if (id != null) {
@@ -81,9 +85,11 @@ class _CreateMacroState extends State<CreateMacroScreen> {
     super.initState();
     commands = widget.macroToEdit?.commands ?? [];
     commandIds = widget.macroToEdit?.commandIds ?? [];
-    delayControllers = widget.macroToEdit?.delays.map((delay) {
-      return TextEditingController(text: delay.toString());
-    }).toList() ?? [];
+    delayControllers =
+        widget.macroToEdit?.delays.map((delay) {
+          return TextEditingController(text: delay.toString());
+        }).toList() ??
+        [];
     _nameController = TextEditingController(text: widget.macroToEdit?.name);
   }
 
@@ -123,16 +129,18 @@ class _CreateMacroState extends State<CreateMacroScreen> {
               });
               return StyledCard(
                 leadingTile: SizedBox(),
-                title: command.name,
+                title: (command.device != null)
+                    ? "${command.name} - ${command.device?.name}"
+                    : command.name,
                 subTitleWidget: (index < delayControllers.length)
                     ? TextField(
-                  controller: delayControllers[index],
-                  decoration: InputDecoration(labelText: "Delay after"),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                )
+                        controller: delayControllers[index],
+                        decoration: InputDecoration(labelText: "Delay after"),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      )
                     : SizedBox(),
                 trailingTile: PopupMenuButton(
                   onSelected: (selection) async {
@@ -145,7 +153,8 @@ class _CreateMacroState extends State<CreateMacroScreen> {
                           }
                           if (index < delayControllers.length) {
                             delayControllers.removeAt(index);
-                          } else if ((index == delayControllers.length) && delayControllers.isNotEmpty) {
+                          } else if ((index == delayControllers.length) &&
+                              delayControllers.isNotEmpty) {
                             delayControllers.removeLast();
                           } else if (commandIds.isEmpty ||
                               commandIds.length == 1) {
@@ -154,8 +163,7 @@ class _CreateMacroState extends State<CreateMacroScreen> {
                         });
                     }
                   },
-                  itemBuilder: (context) =>
-                  [
+                  itemBuilder: (context) => [
                     PopupMenuItem(
                       value: 1,
                       child: Row(

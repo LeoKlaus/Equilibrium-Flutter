@@ -21,6 +21,7 @@ class Command {
   CommandGroupType commandGroup;
   @JsonKey(name: 'device_id', includeToJson: false)
   int? _deviceId;
+
   @JsonKey(name: "device_id", includeFromJson: false, includeToJson: true)
   int? get deviceId => device?.id ?? _deviceId;
   @JsonKey(includeToJson: false)
@@ -49,7 +50,7 @@ class Command {
     this.btAction,
     this.btMediaAction,
     this.macros,
-  }): _deviceId = deviceId;
+  }) : _deviceId = deviceId;
 
   factory Command.fromJson(Map<String, dynamic> json) =>
       _$CommandFromJson(json);
@@ -57,6 +58,22 @@ class Command {
   Map<String, dynamic> toJson() => _$CommandToJson(this);
 
   DropdownMenuEntry<Command> toDropDownMenuEntry() {
-    return DropdownMenuEntry(value: this, label: name);
+    return DropdownMenuEntry(
+      value: this,
+      label: name,
+      labelWidget: Column(
+        children: [
+          Text(name),
+          if (device != null)
+            Text(
+              device?.name ?? "",
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey,
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
