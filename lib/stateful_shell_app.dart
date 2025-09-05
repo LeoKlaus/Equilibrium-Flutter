@@ -9,12 +9,15 @@ import 'package:equilibrium_flutter/views/connect_hub/connect_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_detail_screen.dart';
 import 'package:equilibrium_flutter/views/devices/device_list.dart';
 import 'package:equilibrium_flutter/views/icons/icon_list.dart';
+import 'package:equilibrium_flutter/views/macros/create_macro_screen.dart';
+import 'package:equilibrium_flutter/views/macros/macro_list.dart';
 import 'package:equilibrium_flutter/views/more/more_screen.dart';
 import 'package:equilibrium_flutter/views/scenes/scene_detail_screen.dart';
 import 'package:equilibrium_flutter/views/scenes/scene_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:equilibrium_flutter/models/classes/macro.dart';
 
 import 'helpers/hub_connection_handler.dart';
 
@@ -33,13 +36,14 @@ class StatefulShellApp extends StatelessWidget {
         },
       ),
       StatefulShellRoute.indexedStack(
-        builder: (
-          BuildContext context,
-          GoRouterState state,
-          StatefulNavigationShell navigationShell,
-        ) {
-          return BottomBar(navigationShell: navigationShell);
-        },
+        builder:
+            (
+              BuildContext context,
+              GoRouterState state,
+              StatefulNavigationShell navigationShell,
+            ) {
+              return BottomBar(navigationShell: navigationShell);
+            },
         branches: <StatefulShellBranch>[
           StatefulShellBranch(
             routes: <RouteBase>[
@@ -51,10 +55,9 @@ class StatefulShellApp extends StatelessWidget {
                 routes: <RouteBase>[
                   GoRoute(
                     path: "/:sceneId",
-                    builder:
-                        (context, state) => SceneDetailScreen(
-                          sceneId: int.parse(state.pathParameters['sceneId']!),
-                        ),
+                    builder: (context, state) => SceneDetailScreen(
+                      sceneId: int.parse(state.pathParameters['sceneId']!),
+                    ),
                   ),
                 ],
               ),
@@ -70,12 +73,9 @@ class StatefulShellApp extends StatelessWidget {
                 routes: <RouteBase>[
                   GoRoute(
                     path: "/:deviceId",
-                    builder:
-                        (context, state) => DeviceDetailScreen(
-                          deviceId: int.parse(
-                            state.pathParameters['deviceId']!,
-                          ),
-                        ),
+                    builder: (context, state) => DeviceDetailScreen(
+                      deviceId: int.parse(state.pathParameters['deviceId']!),
+                    ),
                   ),
                 ],
               ),
@@ -103,8 +103,46 @@ class StatefulShellApp extends StatelessWidget {
                     routes: <RouteBase>[
                       GoRoute(
                         path: "/create",
-                        builder:
-                            (context, state) => const CreateCommandScreen(),
+                        builder: (context, state) {
+                          if (state.extra != null) {
+                            return CreateCommandScreen(
+                              reloadParent: state.extra as Function,
+                            );
+                          } else {
+                            return CreateCommandScreen(reloadParent: () {});
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: "/macros",
+                    builder: (context, state) => const MacroList(),
+                    routes: <RouteBase>[
+                      GoRoute(
+                        path: "/create",
+                        builder: (context, state) {
+                          if (state.extra != null) {
+                            final function = state.extra as Function;
+                            return CreateMacroScreen(reloadParent: function);
+                          } else {
+                            return CreateMacroScreen(reloadParent: () {});
+                          }
+                        },
+                      ),
+                      GoRoute(
+                        path: '/edit',
+                        builder: (context, state) {
+                          final (
+                            macroToEdit,
+                            reloadParent,
+                          ) = state.extra
+                              as (Macro, Function);
+                          return CreateMacroScreen(
+                            macroToEdit: macroToEdit,
+                            reloadParent: reloadParent,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -134,14 +172,12 @@ class StatefulShellApp extends StatelessWidget {
       builder: (lightColorScheme, darkColorScheme) {
         return MaterialApp.router(
           title: 'Equilibrium',
-          theme:
-              lightColorScheme != null
-                  ? ThemeData(colorScheme: lightColorScheme, useMaterial3: true)
-                  : lightTheme,
-          darkTheme:
-              darkColorScheme != null
-                  ? ThemeData(colorScheme: darkColorScheme, useMaterial3: true)
-                  : darkTheme,
+          theme: lightColorScheme != null
+              ? ThemeData(colorScheme: lightColorScheme, useMaterial3: true)
+              : lightTheme,
+          darkTheme: darkColorScheme != null
+              ? ThemeData(colorScheme: darkColorScheme, useMaterial3: true)
+              : darkTheme,
           themeMode: ThemeMode.system,
           routerConfig: _router,
         );

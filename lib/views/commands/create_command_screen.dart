@@ -18,7 +18,9 @@ import '../../models/enums/bluetooth_command_type.dart';
 import '../subviews/device_picker.dart';
 
 class CreateCommandScreen extends StatefulWidget {
-  const CreateCommandScreen({super.key});
+  final Function reloadParent;
+
+  const CreateCommandScreen({super.key, required this.reloadParent});
 
   @override
   State<StatefulWidget> createState() => _CreateCommandScreenState();
@@ -71,6 +73,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
       final createdCommand = await connectionHandler.createCommand(command);
       developer.log("Created command ${createdCommand.name}");
       if (mounted) {
+        widget.reloadParent();
         GoRouter.of(context).go("/more/commands");
       }
     } on NotConnectedException {

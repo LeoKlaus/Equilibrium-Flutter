@@ -67,7 +67,7 @@ class _CommandListState extends State<CommandList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          GoRouter.of(context).go("/more/commands/create");
+          GoRouter.of(context).go("/more/commands/create", extra: _refresh);
         },
         child: Icon(Icons.add),
       ),

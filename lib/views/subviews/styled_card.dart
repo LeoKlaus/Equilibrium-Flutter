@@ -4,6 +4,7 @@ class StyledCard extends StatelessWidget {
   final Widget leadingTile;
   final String title;
   final String? subTitle;
+  final Widget? subTitleWidget;
   final Widget? trailingTile;
 
   const StyledCard({
@@ -11,6 +12,7 @@ class StyledCard extends StatelessWidget {
     required this.leadingTile,
     required this.title,
     this.subTitle,
+    this.subTitleWidget,
     this.trailingTile,
   });
 
@@ -22,7 +24,14 @@ class StyledCard extends StatelessWidget {
       elevation: 2,
       child: Column(
         children: [
-          if (subTitle != null)
+          if (subTitleWidget != null)
+            ListTile(
+              leading: leadingTile,
+              title: Text(title),
+              subtitle: subTitleWidget,
+              trailing: trailingTile,
+            )
+          else if (subTitle != null)
             ListTile(
               leading: leadingTile,
               title: Text(title),

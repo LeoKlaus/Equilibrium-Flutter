@@ -4,6 +4,7 @@ import 'package:equilibrium_flutter/models/enums/command_group_type.dart';
 import 'package:equilibrium_flutter/models/classes/device.dart';
 import 'package:equilibrium_flutter/models/enums/network_request_type.dart';
 import 'package:equilibrium_flutter/models/classes/macro.dart';
+import 'package:flutter/material.dart';
 
 import "package:json_annotation/json_annotation.dart";
 
@@ -54,4 +55,8 @@ class Command {
       _$CommandFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommandToJson(this);
+
+  DropdownMenuEntry<Command> toDropDownMenuEntry() {
+    return DropdownMenuEntry(value: this, label: name);
+  }
 }

@@ -102,22 +102,22 @@ const _$CommandTypeEnumMap = {
 };
 
 const _$CommandGroupTypeEnumMap = {
+  CommandGroupType.power: 'power',
   CommandGroupType.volume: 'volume',
   CommandGroupType.navigation: 'navigation',
   CommandGroupType.transport: 'transport',
-  CommandGroupType.coloredButtons: 'colored_buttons',
   CommandGroupType.channel: 'channel',
-  CommandGroupType.power: 'power',
   CommandGroupType.numeric: 'numeric',
   CommandGroupType.input: 'input',
+  CommandGroupType.coloredButtons: 'colored_buttons',
   CommandGroupType.other: 'other',
 };
 
 const _$NetworkRequestTypeEnumMap = {
   NetworkRequestType.get: 'get',
   NetworkRequestType.post: 'post',
+  NetworkRequestType.patch: 'patch',
   NetworkRequestType.delete: 'delete',
   NetworkRequestType.head: 'head',
-  NetworkRequestType.patch: 'patch',
   NetworkRequestType.put: 'put',
 };

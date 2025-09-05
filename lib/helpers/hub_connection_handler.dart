@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:equilibrium_flutter/helpers/preference_handler.dart';
 import 'package:equilibrium_flutter/models/classes/ble_device.dart';
+import 'package:equilibrium_flutter/models/classes/macro.dart';
 import 'package:equilibrium_flutter/models/classes/scene.dart';
 import 'package:equilibrium_flutter/models/classes/user_image.dart';
 import 'package:equilibrium_flutter/repositories/api_repository.dart';
@@ -145,6 +146,15 @@ class HubConnectionHandler {
     final localApi = api;
     if (localApi != null) {
       return await localApi.createCommand(newCommand);
+    } else {
+      throw NotConnectedException();
+    }
+  }
+
+  Future<List<Macro>> getMacros() async {
+    final localApi = api;
+    if (localApi != null) {
+      return await localApi.getMacros();
     } else {
       throw NotConnectedException();
     }

@@ -196,10 +196,41 @@ class ApiRepository {
   Future<Command> createCommand(Command newCommand) async {
     final uri = Uri.http(baseUri, "/commands/");
     final response = await http.post(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newCommand));
-    developer.log("${response.statusCode}");
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       final body = json.decode(response.body);
       return Command.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<void> deleteMacro(int id) async {
+    final uri = Uri.http(baseUri, "/macros/$id");
+    await http.delete(uri);
+  }
+
+  Future<void> executeMacro(int id) async {
+    final uri = Uri.http(baseUri, "/macros/$id/execute");
+    await http.post(uri);
+  }
+
+  Future<Macro> createMacro(Macro newMacro) async {
+    final uri = Uri.http(baseUri, "/macros/");
+    final response = await http.post(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newMacro));
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Macro.fromJson(body);
+    } else {
+      throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
+    }
+  }
+
+  Future<Macro> updateMacro(int id, Macro newMacro) async {
+    final uri = Uri.http(baseUri, "/macros/$id");
+    final response = await http.patch(uri, headers: {"Content-Type": "application/json"}, body: jsonEncode(newMacro));
+    if (response.statusCode >= 200 && response.statusCode <= 299) {
+      final body = json.decode(response.body);
+      return Macro.fromJson(body);
     } else {
       throw InvalidResponseException(statusCode: response.statusCode, body: response.body);
     }
