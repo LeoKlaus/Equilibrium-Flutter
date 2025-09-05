@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../helpers/hub_connection_handler.dart';
-import '../subviews/color_inverted.dart';
 import '../subviews/styled_card.dart';
 
 class MacroList extends StatefulWidget {

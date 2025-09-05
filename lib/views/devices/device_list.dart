@@ -28,10 +28,23 @@ class _DeviceListState extends State<DeviceList> {
     devicesFuture = connectionHandler.getDevices();
   }
 
+  Future<void> _refresh() async {
+    List<Device> devices = await connectionHandler.getDevices();
+    setState(() {
+      devicesFuture = Future.value(devices);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Devices')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          GoRouter.of(context).go("/devices/create", extra: _refresh);
+        },
+        child: Icon(Icons.add),
+      ),
       body: Center(
         child: FutureBuilder<List<Device>>(
           future: devicesFuture,
@@ -67,32 +80,33 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   Widget buildDevices(List<Device> devices) {
-    return ListView.builder(
-      padding: EdgeInsets.only(bottom: 72),
-      itemCount: devices.length,
-      itemBuilder: (context, index) {
-        final device = devices[index];
-        return TappableCard(
-          onTap: () {
-            GoRouter.of(context).go("/devices/${device.id}");
-          },
-          leadingTile:
-              device.imageId == null
-                  ? Icon(device.type.icon, size: 40)
-                  : ColorInverted(
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 72),
+        itemCount: devices.length,
+        itemBuilder: (context, index) {
+          final device = devices[index];
+          return TappableCard(
+            onTap: () {
+              GoRouter.of(context).go("/devices/${device.id}");
+            },
+            leadingTile: device.imageId == null
+                ? Icon(device.type.icon, size: 40)
+                : ColorInverted(
                     child: Image.network(
                       height: 40,
                       width: 40,
                       "http://${connectionHandler.api?.baseUri ?? ""}/images/${device.imageId}",
                     ),
                   ),
-          title: device.name,
-          subTitle:
-              device.manufacturer == null
-                  ? device.model ?? ""
-                  : "${device.manufacturer ?? ""} ${device.model ?? ""}",
-        );
-      },
+            title: device.name,
+            subTitle: device.manufacturer == null
+                ? device.model ?? ""
+                : "${device.manufacturer ?? ""} ${device.model ?? ""}",
+          );
+        },
+      ),
     );
   }
 }

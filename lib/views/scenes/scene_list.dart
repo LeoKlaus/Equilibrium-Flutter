@@ -30,10 +30,23 @@ class _SceneListState extends State<SceneList> {
     scenesFuture = connectionHandler.getScenes();
   }
 
+  Future<void> _refresh() async {
+    List<Scene> scenes = await connectionHandler.getScenes();
+    setState(() {
+      scenesFuture = Future.value(scenes);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Scenes')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          GoRouter.of(context).go("/scenes/create", extra: _refresh);
+        },
+        child: Icon(Icons.add),
+      ),
       body: Center(
         child: FutureBuilder<List<Scene>>(
           future: scenesFuture,
@@ -69,66 +82,68 @@ class _SceneListState extends State<SceneList> {
   }
 
   Widget buildScenes(List<Scene> scenes) {
-    return ListView.builder(
-      padding: EdgeInsets.only(bottom: 72),
-      itemCount: scenes.length,
-      itemBuilder: (context, index) {
-        final scene = scenes[index];
-        return TappableCard(
-          onTap: () {
-            GoRouter.of(context).go("/scenes/${scene.id}");
-          },
-          leadingTile: StatusInjected(
-            sceneId: scene.id,
-            sceneActiveWidget: CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Center(
-                child: Icon(
-                  color: Colors.black,
-                  Icons.power_settings_new,
-                  size: 32,
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 72),
+        itemCount: scenes.length,
+        itemBuilder: (context, index) {
+          final scene = scenes[index];
+          return TappableCard(
+            onTap: () {
+              GoRouter.of(context).go("/scenes/${scene.id}");
+            },
+            leadingTile: StatusInjected(
+              sceneId: scene.id,
+              sceneActiveWidget: CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Center(
+                  child: Icon(
+                    color: Colors.black,
+                    Icons.power_settings_new,
+                    size: 32,
+                  ),
                 ),
               ),
-            ),
-            sceneInactiveWidget:
-                (scene.image?.id == null
-                    ? CircleAvatar(
+              sceneInactiveWidget: (scene.image?.id == null
+                  ? CircleAvatar(
                       backgroundColor: Colors.grey,
                       child: Center(child: Text(scene.name.substring(0, 1))),
                     )
-                    : ColorInverted(
+                  : ColorInverted(
                       child: Image.network(
                         height: 40,
                         width: 40,
                         "http://192.168.27.51:8000/images/${scene.image?.id}",
                       ),
                     )),
-            transitionWidget: CircularProgressIndicator(),
-          ),
-          title: scene.name,
-          subTitle:
-              scene.devices
-                  ?.map((device) => device.name)
-                  .toList()
-                  .join(" - ") ??
-              "",
-          trailingTile: StatusInjected(
-            sceneId: scene.id,
-            sceneActiveWidget: ElevatedButton(
-              child: Text('Stop'),
-              onPressed: () {
-                connectionHandler.stopCurrentScene();
-              },
+              transitionWidget: CircularProgressIndicator(),
             ),
-            sceneInactiveWidget: ElevatedButton(
-              child: Text('Start'),
-              onPressed: () {
-                connectionHandler.startScene(scene.id!);
-              },
+            title: scene.name,
+            subTitle:
+                scene.devices
+                    ?.map((device) => device.name)
+                    .toList()
+                    .join(" - ") ??
+                "",
+            trailingTile: StatusInjected(
+              sceneId: scene.id,
+              sceneActiveWidget: ElevatedButton(
+                child: Text('Stop'),
+                onPressed: () {
+                  connectionHandler.stopCurrentScene();
+                },
+              ),
+              sceneInactiveWidget: ElevatedButton(
+                child: Text('Start'),
+                onPressed: () {
+                  connectionHandler.startScene(scene.id!);
+                },
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
