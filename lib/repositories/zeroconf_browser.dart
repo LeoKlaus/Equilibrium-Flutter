@@ -1,11 +1,17 @@
 /*
-Failed to resolve discovered services on the android device I tested with, maybe try again later or with another device.
+// Failed to resolve discovered services on the android device I tested with, maybe try again later or with another device.
 
 import 'package:bonsoir/bonsoir.dart';
 
 class ZeroconfBrowser {
   BonsoirDiscovery? discovery;
 
+  Future<void> resolve(BonsoirService service, ServiceResolver resolver) async {
+    print("Resolving...");
+    await Future.delayed(Duration(seconds: 2));
+    service.resolve(resolver);
+  }
+  
   Future<void> startDiscovery() async {
     stopDiscovery();
 
@@ -17,6 +23,7 @@ class ZeroconfBrowser {
       switch (event) {
         case BonsoirDiscoveryServiceFoundEvent():
           print('Service found : ${event.service.toJson()}');
+          resolve(event.service, discovery!.serviceResolver);
           event.service.resolve(
             discovery!.serviceResolver,
           ); // Should be called when the user wants to connect to this service.

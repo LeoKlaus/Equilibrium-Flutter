@@ -1,4 +1,5 @@
 import 'package:equilibrium_flutter/helpers/preference_handler.dart';
+import 'package:equilibrium_flutter/repositories/zeroconf_browser.dart';
 import 'package:equilibrium_flutter/stateful_shell_app.dart';
 import 'package:flutter/material.dart';
 

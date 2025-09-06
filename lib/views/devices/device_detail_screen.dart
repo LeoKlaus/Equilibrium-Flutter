@@ -1,8 +1,14 @@
+import 'dart:developer' as developer;
+
+import 'package:equilibrium_flutter/helpers/command_helper.dart';
+import 'package:equilibrium_flutter/models/enums/remote_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../helpers/hub_connection_handler.dart';
+import '../../models/classes/command.dart';
 import '../../models/classes/device.dart';
+import '../subviews/common_controls.dart';
 
 class DeviceDetailScreen extends StatefulWidget {
   final int deviceId;
@@ -27,6 +33,29 @@ class _DeviceDetailScreenState extends State<DeviceDetailScreen> {
     deviceFuture = connectionHandler.getDevice(widget.deviceId);
   }
 
+  List<Widget> powerButtonBuilder(List<Command>? commands) {
+    return commands?.map((command) {
+          return IconButton(
+            onPressed: () {
+              if(command.id != null) {
+                connectionHandler.api?.sendCommand(command.id!);
+              } else {
+                developer.log("Couldn't get command id");
+              }
+            },
+            icon: command.button == RemoteButton.powerToggle
+                ? Icon(command.button.icon)
+                : Icon(
+                    command.button.icon,
+                    color: command.button == RemoteButton.powerOff
+                        ? Colors.red
+                        : Colors.green,
+                  ),
+          );
+        }).toList() ??
+        [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +64,18 @@ class _DeviceDetailScreenState extends State<DeviceDetailScreen> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          FutureBuilder(
+            future: deviceFuture,
+            builder: (context, snapshot) {
+              return Row(
+                children: powerButtonBuilder(
+                  snapshot.data?.commands?.powerCommands,
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<Device>(
@@ -55,6 +96,9 @@ class _DeviceDetailScreenState extends State<DeviceDetailScreen> {
   }
 
   Widget buildDevice(Device device) {
-    return Text(device.name);
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
+      child: CommonControls(devices: [device]),
+    );
   }
 }

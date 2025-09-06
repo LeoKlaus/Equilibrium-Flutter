@@ -114,7 +114,7 @@ class _CommandListState extends State<CommandList> {
         itemBuilder: (context, index) {
           final command = commands[index];
           return StyledCard(
-            leadingTile: RemoteButton.icon(command.button),
+            leadingTile: command.toDropDownMenuEntry().leadingIcon ?? Icon(command.button.icon),
             title: command.name,
             subTitle:
                 command.device?.name != null

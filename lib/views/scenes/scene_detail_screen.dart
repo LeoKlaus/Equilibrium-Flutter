@@ -1,3 +1,7 @@
+import 'dart:developer' as developer;
+
+import 'package:equilibrium_flutter/views/subviews/common_controls.dart';
+import 'package:equilibrium_flutter/views/subviews/status_injected.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -35,6 +39,38 @@ class _DeviceDetailScreenState extends State<SceneDetailScreen> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          FutureBuilder(
+            future: sceneFuture,
+            builder: (context, snapshot) {
+              return Row(
+                children: [
+                  StatusInjected(
+                    sceneId: snapshot.data?.id,
+                    sceneActiveWidget: IconButton(
+                      onPressed: () {
+                        final sceneId = snapshot.data?.id;
+                        if (sceneId != null) {
+                          connectionHandler.startScene(sceneId);
+                        } else {
+                          developer.log("Couldn't get scene id");
+                        }
+                      },
+                      icon: Icon(Icons.power_settings_new, color: Colors.red),
+                    ),
+                    sceneInactiveWidget: IconButton(
+                      onPressed: () {
+                        connectionHandler.stopCurrentScene();
+                      },
+                      icon: Icon(Icons.power_settings_new, color: Colors.green),
+                    ),
+                    transitionWidget: CircularProgressIndicator(),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<Scene>(
@@ -55,6 +91,9 @@ class _DeviceDetailScreenState extends State<SceneDetailScreen> {
   }
 
   Widget buildScene(Scene scene) {
-    return Text(scene.name);
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
+      child: CommonControls(devices: scene.devices ?? []),
+    );
   }
 }

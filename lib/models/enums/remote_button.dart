@@ -106,102 +106,102 @@ enum RemoteButton {
   @JsonValue("other")
   other;
 
-  static Widget icon(RemoteButton button) {
-    switch (button) {
+  IconData get icon {
+    switch (this) {
       case RemoteButton.powerToggle:
-        return Icon(Icons.power_settings_new);
+        return Icons.power_settings_new;
       case RemoteButton.powerOff:
-        return Icon(Icons.power_settings_new);
+        return Icons.power_settings_new;
       case RemoteButton.powerOn:
-        return Icon(Icons.power_settings_new);
+        return Icons.power_settings_new;
       case RemoteButton.volumeUp:
-        return Icon(Icons.volume_up);
+        return Icons.volume_up;
       case RemoteButton.volumeDown:
-        return Icon(Icons.volume_down);
+        return Icons.volume_down;
       case RemoteButton.mute:
-        return Icon(Icons.volume_mute);
+        return Icons.volume_mute;
       case RemoteButton.directionUp:
-        return Icon(Icons.arrow_drop_up);
+        return Icons.arrow_drop_up;
       case RemoteButton.directionDown:
-        return Icon(Icons.arrow_drop_down);
+        return Icons.arrow_drop_down;
       case RemoteButton.directionLeft:
-        return Icon(Icons.arrow_left);
+        return Icons.arrow_left;
       case RemoteButton.directionRight:
-        return Icon(Icons.arrow_right);
+        return Icons.arrow_right;
       case RemoteButton.select:
-        return Icon(Icons.radio_button_checked);
+        return Icons.radio_button_checked;
       case RemoteButton.guide:
-        return Icon(Icons.explore);
+        return Icons.explore;
       case RemoteButton.info:
-        return Icon(Icons.info_outline);
+        return Icons.info_outline;
       case RemoteButton.back:
-        return Icon(Icons.arrow_back);
+        return Icons.arrow_back;
       case RemoteButton.menu:
-        return Icon(Icons.menu);
+        return Icons.menu;
       case RemoteButton.home:
-        return Icon(Icons.home_outlined);
+        return Icons.home_outlined;
       case RemoteButton.exit:
-        return Icon(Icons.exit_to_app);
+        return Icons.exit_to_app;
       case RemoteButton.play:
-        return Icon(Icons.play_arrow);
+        return Icons.play_arrow;
       case RemoteButton.pause:
-        return Icon(Icons.pause);
+        return Icons.pause;
       case RemoteButton.playpause:
-        return Icon(Icons.play_arrow_outlined);
+        return Icons.play_arrow_outlined;
       case RemoteButton.stop:
-        return Icon(Icons.stop);
+        return Icons.stop;
       case RemoteButton.fastForward:
-        return Icon(Icons.fast_forward);
+        return Icons.fast_forward;
       case RemoteButton.rewind:
-        return Icon(Icons.fast_rewind);
+        return Icons.fast_rewind;
       case RemoteButton.nextTrack:
-        return Icon(Icons.skip_next);
+        return Icons.skip_next;
       case RemoteButton.previousTrack:
-        return Icon(Icons.skip_previous);
+        return Icons.skip_previous;
       case RemoteButton.record:
-        return Icon(Icons.fiber_manual_record);
+        return Icons.fiber_manual_record;
       case RemoteButton.channelUp:
-        return Icon(Icons.upload);
+        return Icons.upload;
       case RemoteButton.channelDown:
-        return Icon(Icons.download);
+        return Icons.download;
       case RemoteButton.green:
-        return Icon(Icons.rectangle_rounded, color: Colors.green);
+        return Icons.rectangle_rounded;
       case RemoteButton.red:
-        return Icon(Icons.rectangle_rounded, color: Colors.red);
+        return Icons.rectangle_rounded;
       case RemoteButton.blue:
-        return Icon(Icons.rectangle_rounded, color: Colors.blue);
+        return Icons.rectangle_rounded;
       case RemoteButton.yellow:
-        return Icon(Icons.rectangle_rounded, color: Colors.yellow);
+        return Icons.rectangle_rounded;
       case RemoteButton.numberZero:
-        return Text("0");
+        return IconData(0x0030, fontFamily: "robotoCondensed");
       case RemoteButton.numberOne:
-        return Text("1");
+        return IconData(0x0031, fontFamily: "robotoCondensed");
       case RemoteButton.numberTwo:
-        return Text("2");
+        return IconData(0x0032, fontFamily: "robotoCondensed");
       case RemoteButton.numberThree:
-        return Text("3");
+        return IconData(0x0033, fontFamily: "robotoCondensed");
       case RemoteButton.numberFour:
-        return Text("4");
+        return IconData(0x0034, fontFamily: "robotoCondensed");
       case RemoteButton.numberFive:
-        return Text("5");
+        return IconData(0x0035, fontFamily: "robotoCondensed");
       case RemoteButton.numberSix:
-        return Text("6");
+        return IconData(0x0036, fontFamily: 'robotoCondensed');
       case RemoteButton.numberSeven:
-        return Text("7");
+        return IconData(0x0037, fontFamily: "robotoCondensed");
       case RemoteButton.numberEight:
-        return Text("8");
+        return IconData(0x0038, fontFamily: "robotoCondensed");
       case RemoteButton.numberNine:
-        return Text("9");
+        return IconData(0x0039, fontFamily: "robotoCondensed");
       case RemoteButton.brightnessUp:
-        return Icon(Icons.brightness_high);
+        return Icons.brightness_high;
       case RemoteButton.brightnessDown:
-        return Icon(Icons.brightness_low);
+        return Icons.brightness_low;
       case RemoteButton.turnOn:
-        return Icon(Icons.power);
+        return Icons.power;
       case RemoteButton.turnOff:
-        return Icon(Icons.power_off);
+        return Icons.power_off;
       case RemoteButton.other:
-        return Icon(Icons.more_horiz);
+        return Icons.more_horiz;
     }
   }
 
@@ -214,17 +214,17 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.powerToggle,
             label: "Power toggle",
-            leadingIcon: RemoteButton.icon(RemoteButton.powerToggle),
+            leadingIcon: Icon(RemoteButton.powerToggle.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.powerOn,
             label: "Power on",
-            leadingIcon: RemoteButton.icon(RemoteButton.powerOn),
+            leadingIcon: Icon(RemoteButton.powerOn.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.powerOff,
             label: "Power off",
-            leadingIcon: RemoteButton.icon(RemoteButton.powerOff),
+            leadingIcon: Icon(RemoteButton.powerOff.icon),
           ),
         ];
       case CommandGroupType.volume:
@@ -232,17 +232,17 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.volumeUp,
             label: "Volume up",
-            leadingIcon: RemoteButton.icon(RemoteButton.volumeUp),
+            leadingIcon: Icon(RemoteButton.volumeUp.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.volumeDown,
             label: "Volume down",
-            leadingIcon: RemoteButton.icon(RemoteButton.volumeDown),
+            leadingIcon: Icon(RemoteButton.volumeDown.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.mute,
             label: "Mute",
-            leadingIcon: RemoteButton.icon(RemoteButton.mute),
+            leadingIcon: Icon(RemoteButton.mute.icon),
           ),
         ];
       case CommandGroupType.navigation:
@@ -250,47 +250,47 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.directionUp,
             label: "Up",
-            leadingIcon: RemoteButton.icon(RemoteButton.directionUp),
+            leadingIcon: Icon(RemoteButton.directionUp.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.directionDown,
             label: "Down",
-            leadingIcon: RemoteButton.icon(RemoteButton.directionDown),
+            leadingIcon: Icon(RemoteButton.directionDown.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.directionLeft,
             label: "Left",
-            leadingIcon: RemoteButton.icon(RemoteButton.directionLeft),
+            leadingIcon: Icon(RemoteButton.directionLeft.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.directionRight,
             label: "Right",
-            leadingIcon: RemoteButton.icon(RemoteButton.directionRight),
+            leadingIcon: Icon(RemoteButton.directionRight.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.select,
             label: "Select",
-            leadingIcon: RemoteButton.icon(RemoteButton.select),
+            leadingIcon: Icon(RemoteButton.select.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.back,
             label: "Back",
-            leadingIcon: RemoteButton.icon(RemoteButton.back),
+            leadingIcon: Icon(RemoteButton.back.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.menu,
             label: "Menu",
-            leadingIcon: RemoteButton.icon(RemoteButton.menu),
+            leadingIcon: Icon(RemoteButton.menu.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.exit,
             label: "Exit",
-            leadingIcon: RemoteButton.icon(RemoteButton.exit),
+            leadingIcon: Icon(RemoteButton.exit.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.guide,
             label: "Guide",
-            leadingIcon: RemoteButton.icon(RemoteButton.guide),
+            leadingIcon: Icon(RemoteButton.guide.icon),
           ),
         ];
       case CommandGroupType.transport:
@@ -298,47 +298,47 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.playpause,
             label: "Play/Pause",
-            leadingIcon: RemoteButton.icon(RemoteButton.playpause),
+            leadingIcon: Icon(RemoteButton.playpause.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.play,
             label: "Play",
-            leadingIcon: RemoteButton.icon(RemoteButton.play),
+            leadingIcon: Icon(RemoteButton.play.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.pause,
             label: "Pause",
-            leadingIcon: RemoteButton.icon(RemoteButton.pause),
+            leadingIcon: Icon(RemoteButton.pause.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.stop,
             label: "Stop",
-            leadingIcon: RemoteButton.icon(RemoteButton.stop),
+            leadingIcon: Icon(RemoteButton.stop.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.fastForward,
             label: "Fast forward",
-            leadingIcon: RemoteButton.icon(RemoteButton.fastForward),
+            leadingIcon: Icon(RemoteButton.fastForward.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.rewind,
             label: "Rewind",
-            leadingIcon: RemoteButton.icon(RemoteButton.rewind),
+            leadingIcon: Icon(RemoteButton.rewind.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.nextTrack,
             label: "Next track",
-            leadingIcon: RemoteButton.icon(RemoteButton.nextTrack),
+            leadingIcon: Icon(RemoteButton.nextTrack.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.previousTrack,
             label: "Previous track",
-            leadingIcon: RemoteButton.icon(RemoteButton.previousTrack),
+            leadingIcon: Icon(RemoteButton.previousTrack.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.record,
             label: "Record",
-            leadingIcon: RemoteButton.icon(RemoteButton.record),
+            leadingIcon: Icon(RemoteButton.record.icon),
           ),
         ];
       case CommandGroupType.channel:
@@ -346,12 +346,12 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.channelUp,
             label: "Channel up",
-            leadingIcon: RemoteButton.icon(RemoteButton.channelUp),
+            leadingIcon: Icon(RemoteButton.channelUp.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.channelDown,
             label: "Channel down",
-            leadingIcon: RemoteButton.icon(RemoteButton.channelDown),
+            leadingIcon: Icon(RemoteButton.channelDown.icon),
           ),
         ];
       case CommandGroupType.numeric:
@@ -359,52 +359,52 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.numberZero,
             label: "0",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberZero),
+            leadingIcon: Icon(RemoteButton.numberZero.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberOne,
             label: "1",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberOne),
+            leadingIcon: Icon(RemoteButton.numberOne.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberTwo,
             label: "2",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberTwo),
+            leadingIcon: Icon(RemoteButton.numberTwo.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberThree,
             label: "3",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberThree),
+            leadingIcon: Icon(RemoteButton.numberThree.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberFour,
             label: "4",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberFour),
+            leadingIcon: Icon(RemoteButton.numberFour.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberFive,
             label: "5",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberFive),
+            leadingIcon: Icon(RemoteButton.numberFive.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberSix,
             label: "6",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberSix),
+            leadingIcon: Icon(RemoteButton.numberSix.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberSeven,
             label: "7",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberSeven),
+            leadingIcon: Icon(RemoteButton.numberSeven.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberEight,
             label: "8",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberEight),
+            leadingIcon: Icon(RemoteButton.numberEight.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.numberNine,
             label: "9",
-            leadingIcon: RemoteButton.icon(RemoteButton.numberNine),
+            leadingIcon: Icon(RemoteButton.numberNine.icon),
           ),
         ];
       case CommandGroupType.input:
@@ -412,7 +412,7 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.other,
             label: "Other",
-            leadingIcon: RemoteButton.icon(RemoteButton.other),
+            leadingIcon: Icon(RemoteButton.other.icon),
           ),
         ];
       case CommandGroupType.coloredButtons:
@@ -420,22 +420,22 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.green,
             label: "Green",
-            leadingIcon: RemoteButton.icon(RemoteButton.green),
+            leadingIcon: Icon(RemoteButton.green.icon, color: Colors.green),
           ),
           DropdownMenuEntry(
             value: RemoteButton.red,
             label: "Red",
-            leadingIcon: RemoteButton.icon(RemoteButton.red),
+            leadingIcon: Icon(RemoteButton.red.icon, color: Colors.red),
           ),
           DropdownMenuEntry(
             value: RemoteButton.blue,
             label: "Blue",
-            leadingIcon: RemoteButton.icon(RemoteButton.blue),
+            leadingIcon: Icon(RemoteButton.blue.icon, color: Colors.blue),
           ),
           DropdownMenuEntry(
             value: RemoteButton.yellow,
             label: "Yellow",
-            leadingIcon: RemoteButton.icon(RemoteButton.yellow),
+            leadingIcon: Icon(RemoteButton.yellow.icon, color: Colors.yellow),
           ),
         ];
       case CommandGroupType.other:
@@ -443,27 +443,27 @@ enum RemoteButton {
           DropdownMenuEntry(
             value: RemoteButton.brightnessUp,
             label: "Brightness up",
-            leadingIcon: RemoteButton.icon(RemoteButton.brightnessUp),
+            leadingIcon: Icon(RemoteButton.brightnessUp.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.brightnessDown,
             label: "Brightness down",
-            leadingIcon: RemoteButton.icon(RemoteButton.brightnessDown),
+            leadingIcon: Icon(RemoteButton.brightnessDown.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.turnOn,
             label: "Turn on",
-            leadingIcon: RemoteButton.icon(RemoteButton.turnOn),
+            leadingIcon: Icon(RemoteButton.turnOn.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.turnOff,
             label: "Turn off",
-            leadingIcon: RemoteButton.icon(RemoteButton.turnOff),
+            leadingIcon: Icon(RemoteButton.turnOff.icon),
           ),
           DropdownMenuEntry(
             value: RemoteButton.other,
             label: "Other",
-            leadingIcon: RemoteButton.icon(RemoteButton.other),
+            leadingIcon: Icon(RemoteButton.other.icon),
           ),
         ];
     }
