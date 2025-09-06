@@ -11,17 +11,21 @@ class ChannelControlGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommandButtonIfExists(
-          commands: commands,
-          button: RemoteButton.channelUp,
-        ),
-        CommandButtonIfExists(
-          commands: commands,
-          button: RemoteButton.channelDown,
-        )
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 250),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.channelUp,
+          ),
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.channelDown,
+          ),
+        ],
+      ),
     );
   }
 }

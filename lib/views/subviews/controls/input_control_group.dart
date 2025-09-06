@@ -16,14 +16,20 @@ class InputControlGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.extent(
-      shrinkWrap: true,
-      maxCrossAxisExtent: 90,
-      mainAxisSpacing: 10,
-      childAspectRatio: 1.5,
-      children: commands.map((command) {
-        return IconButton(onPressed: () {}, icon: Text(command.name, style: TextStyle(fontSize: 10)));
-      }).toList(),
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 350, maxHeight: 150),
+      child: GridView.extent(
+        shrinkWrap: true,
+        maxCrossAxisExtent: 90,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1.5,
+        children: commands.map((command) {
+          return IconButton(
+            onPressed: () {},
+            icon: Text(command.name, style: TextStyle(fontSize: 10)),
+          );
+        }).toList(),
+      ),
     );
   }
 }

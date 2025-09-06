@@ -1,4 +1,5 @@
 import 'package:equilibrium_flutter/views/subviews/controls/channel_control_group.dart';
+import 'package:equilibrium_flutter/views/subviews/controls/colored_buttons_control_group.dart';
 import 'package:equilibrium_flutter/views/subviews/controls/input_control_group.dart';
 import 'package:equilibrium_flutter/views/subviews/controls/navigation_control_group.dart';
 import 'package:equilibrium_flutter/views/subviews/controls/transport_control_group.dart';
@@ -22,19 +23,28 @@ class CommonControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: This overflows on small screens
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InputControlGroup(commands: inputController?.commands ?? []),
-        Row(
-          children: [
-            VolumeControlGroup(commands: audioController?.commands ?? []),
-            NavigationControlGroup(
-              commands: navigationController?.commands ?? [],
-            ),
-            ChannelControlGroup(commands: channelController?.commands ?? []),
-          ],
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 350),
+          child: Row(
+            children: [
+              VolumeControlGroup(commands: audioController?.commands ?? []),
+              NavigationControlGroup(
+                commands: navigationController?.commands ?? [],
+              ),
+              ChannelControlGroup(commands: channelController?.commands ?? []),
+            ],
+          ),
         ),
-        TransportControlGroup(commands: navigationController?.commands ?? [])
+        TransportControlGroup(commands: navigationController?.commands ?? []),
+        ColoredButtonsControlGroup(
+          commands: navigationController?.commands ?? [],
+        ),
       ],
     );
   }

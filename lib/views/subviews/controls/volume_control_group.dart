@@ -11,18 +11,22 @@ class VolumeControlGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommandButtonIfExists(
-          commands: commands,
-          button: RemoteButton.volumeUp,
-        ),
-        CommandButtonIfExists(
-          commands: commands,
-          button: RemoteButton.volumeDown,
-        ),
-        CommandButtonIfExists(commands: commands, button: RemoteButton.mute),
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 250),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.volumeUp,
+          ),
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.volumeDown,
+          ),
+          CommandButtonIfExists(commands: commands, button: RemoteButton.mute),
+        ],
+      ),
     );
   }
 }

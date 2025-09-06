@@ -10,15 +10,34 @@ class ColoredButtonsControlGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 4,
-      children: [
-        CommandButtonIfExists(commands: commands, button: RemoteButton.red, icon: Icon(Icons.rectangle_rounded, color: Colors.red)),
-        CommandButtonIfExists(commands: commands, button: RemoteButton.green, icon: Icon(Icons.rectangle_rounded, color: Colors.green)),
-        CommandButtonIfExists(commands: commands, button: RemoteButton.yellow, icon: Icon(Icons.rectangle_rounded, color: Colors.yellow)),
-        CommandButtonIfExists(commands: commands, button: RemoteButton.blue, icon: Icon(Icons.rectangle_rounded, color: Colors.blue)),
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 150, maxWidth: 250),
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 4,
+        children: [
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.red,
+            icon: Icon(Icons.rectangle_rounded, color: Colors.red),
+          ),
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.green,
+            icon: Icon(Icons.rectangle_rounded, color: Colors.green),
+          ),
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.yellow,
+            icon: Icon(Icons.rectangle_rounded, color: Colors.yellow),
+          ),
+          CommandButtonIfExists(
+            commands: commands,
+            button: RemoteButton.blue,
+            icon: Icon(Icons.rectangle_rounded, color: Colors.blue),
+          ),
+        ],
+      ),
     );
   }
 }

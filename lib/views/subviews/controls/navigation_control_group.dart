@@ -10,13 +10,12 @@ class NavigationControlGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 250,
-      height: 250,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 250, maxHeight: 250),
       child: GridView.count(
         crossAxisCount: 3,
-
         shrinkWrap: true,
+        padding: EdgeInsetsGeometry.symmetric(vertical: 0, horizontal: 0),
         children: [
           CommandButtonIfExists(
             commands: commands,

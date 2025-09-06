@@ -15,20 +15,22 @@ class CommandButtonIfExists extends StatelessWidget {
     this.useName = false,
     this.icon,
   }) : command = commands.firstWhereOrNull(
-         (command) => command.button == button,
-       );
+        (command) => command.button == button,
+  );
 
   @override
   Widget build(BuildContext context) {
     return (command != null)
         ? IconButton(
-            onPressed: () {},
-            icon:
-                icon ??
-                (useName
-                    ? Text(command!.name)
-                    : Icon(command!.button.icon, size: 50)),
-          )
-        : Text("");
+        constraints: BoxConstraints(maxHeight: 50, maxWidth: 50),
+        onPressed: () {},
+        icon:
+        icon ??
+            (useName
+                ? Text(command!.name)
+                : SizedBox.expand(
+              child: FittedBox(child: Icon(command!.button.icon)),
+            )))
+            : Text("");
   }
 }

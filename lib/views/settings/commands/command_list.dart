@@ -1,7 +1,6 @@
 import 'dart:developer' as developer;
 
 import 'package:equilibrium_flutter/models/classes/command.dart';
-import 'package:equilibrium_flutter/models/enums/remote_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
