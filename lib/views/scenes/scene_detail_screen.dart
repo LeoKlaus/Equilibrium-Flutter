@@ -49,18 +49,18 @@ class _DeviceDetailScreenState extends State<SceneDetailScreen> {
                     sceneId: snapshot.data?.id,
                     sceneActiveWidget: IconButton(
                       onPressed: () {
+                        connectionHandler.stopCurrentScene();
+                      },
+                      icon: Icon(Icons.power_settings_new, color: Colors.red),
+                    ),
+                    sceneInactiveWidget: IconButton(
+                      onPressed: () {
                         final sceneId = snapshot.data?.id;
                         if (sceneId != null) {
                           connectionHandler.startScene(sceneId);
                         } else {
                           developer.log("Couldn't get scene id");
                         }
-                      },
-                      icon: Icon(Icons.power_settings_new, color: Colors.red),
-                    ),
-                    sceneInactiveWidget: IconButton(
-                      onPressed: () {
-                        connectionHandler.stopCurrentScene();
                       },
                       icon: Icon(Icons.power_settings_new, color: Colors.green),
                     ),
