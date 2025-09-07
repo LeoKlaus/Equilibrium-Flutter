@@ -232,6 +232,7 @@ class StatefulShellApp extends StatelessWidget {
       builder: (lightColorScheme, darkColorScheme) {
         return MaterialApp.router(
           title: 'Equilibrium',
+          debugShowCheckedModeBanner: false,
           theme: lightColorScheme != null
               ? ThemeData(colorScheme: lightColorScheme, useMaterial3: true)
               : lightTheme,

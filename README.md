@@ -6,11 +6,21 @@ If you don't know about Equilibrium, I recommend [taking a look at that project 
 Currently, I'm only testing this on Android and Chrome/Safari but building for Windows and Linux should be possible without (major) modifications.
 If you're looking for an iOS app, I suggest using [Equilibrium-iOS](https://github.com/LeoKlaus/Equilibrium-iOS), but you may also try build the Flutter app if you hate native apps.
 
-
 ## Contributing
 
 This is my first time using Flutter so expect mediocre code quality at best. If you'd like to contribute a feature, please fork this repo and create a PR.
 
 ## Installation
 
-As of now, I don't distribute binaries for this app, as it is still missing a lot of content. If you still want to try it, you have to install [Flutter](https://docs.flutter.dev/get-started/install) and build it yourself.
+The web version of this will be bundled with future releases of Equilibrium, an Android APK is available in the [releases](https://github.com/LeoKlaus/Equilibrium-Flutter/releases) section.
+
+## Known Issues
+
+- The scene and device control screens may overflow on small screens
+- Many errors are not handled
+
+## Screenshots
+
+![Scene overview](screenshots/scenes.png)
+![Scene detail](screenshots/scene-detail.png)
+![Settings](screenshots/settings.png)
