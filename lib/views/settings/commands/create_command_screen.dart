@@ -4,6 +4,7 @@ import 'package:equilibrium_flutter/models/classes/command.dart';
 import 'package:equilibrium_flutter/models/enums/bluetooth_command.dart';
 import 'package:equilibrium_flutter/models/enums/command_group_type.dart';
 import 'package:equilibrium_flutter/models/enums/command_type.dart';
+import 'package:equilibrium_flutter/models/enums/integration_action.dart';
 import 'package:equilibrium_flutter/models/enums/network_request_type.dart';
 import 'package:equilibrium_flutter/models/enums/remote_button.dart';
 import 'package:equilibrium_flutter/repositories/api_repository.dart';
@@ -35,6 +36,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
   late TextEditingController _btCommandKeyController;
   late TextEditingController _hostController;
   late TextEditingController _bodyController;
+  late TextEditingController _entityNameController;
 
   Device? device;
   CommandGroupType group = CommandGroupType.other;
@@ -43,6 +45,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
   BluetoothCommandType btCommandType = BluetoothCommandType.regularKey;
   BluetoothCommand btCommand = BluetoothCommand.enter;
   NetworkRequestType networkRequestType = NetworkRequestType.get;
+  IntegrationAction integrationAction = IntegrationAction.toggleLight;
 
   Future<void> createCommand() async {
     final command = Command(
@@ -67,6 +70,11 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
               btCommandType == BluetoothCommandType.mediaKey)
           ? btCommand.rawValue()!
           : null,
+      integrationAction:
+      (type == CommandType.integration) ? integrationAction : null,
+      integrationEntity:
+      (type == CommandType.integration && integrationAction == IntegrationAction.toggleLight) ?
+          _entityNameController.text : null,
     );
 
     try {
@@ -90,6 +98,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
     _btCommandKeyController = TextEditingController();
     _hostController = TextEditingController();
     _bodyController = TextEditingController();
+    _entityNameController = TextEditingController();
   }
 
   @override
@@ -187,6 +196,7 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
               CommandType.bluetooth => buildBluetoothSection(),
               CommandType.network => buildNetworkSection(),
               CommandType.script => buildScriptSection(),
+              CommandType.integration => buildIntegrationSection(),
             },
       ),
     );
@@ -269,6 +279,34 @@ class _CreateCommandScreenState extends State<CreateCommandScreen> {
           decoration: InputDecoration(
             labelText: 'Body',
             hintText: "",
+            border: OutlineInputBorder(),
+          ),
+        ),
+
+      ElevatedButton(onPressed: createCommand, child: Text("Create command")),
+    ];
+  }
+
+  List<Widget> buildIntegrationSection() {
+    return [
+      DropdownMenu<IntegrationAction>(
+        width: double.infinity,
+        initialSelection: IntegrationAction.toggleLight,
+        requestFocusOnTap: false,
+        label: const Text('Key'),
+        onSelected: (IntegrationAction? selectedAction) {
+          setState(() {
+            integrationAction = selectedAction ?? IntegrationAction.toggleLight;
+          });
+        },
+        dropdownMenuEntries: IntegrationAction.dropDownEntries,
+      ),
+      if (integrationAction == IntegrationAction.toggleLight)
+        TextField(
+          controller: _entityNameController,
+          decoration: InputDecoration(
+            labelText: 'Entity',
+            hintText: "light.ceiling_lamp",
             border: OutlineInputBorder(),
           ),
         ),

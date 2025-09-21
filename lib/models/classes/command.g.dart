@@ -29,6 +29,11 @@ Command _$CommandFromJson(Map<String, dynamic> json) => Command(
   macros: (json['macros'] as List<dynamic>?)
       ?.map((e) => Macro.fromJson(e as Map<String, dynamic>))
       .toList(),
+  integrationAction: $enumDecodeNullable(
+    _$IntegrationActionEnumMap,
+    json['integration_action'],
+  ),
+  integrationEntity: json['integration_entity'] as String?,
 );
 
 Map<String, dynamic> _$CommandToJson(Command instance) => <String, dynamic>{
@@ -42,6 +47,8 @@ Map<String, dynamic> _$CommandToJson(Command instance) => <String, dynamic>{
   'body': instance.body,
   'bt_action': instance.btAction,
   'bt_media_action': instance.btMediaAction,
+  'integration_action': _$IntegrationActionEnumMap[instance.integrationAction],
+  'integration_entity': instance.integrationEntity,
 };
 
 const _$RemoteButtonEnumMap = {
@@ -99,6 +106,7 @@ const _$CommandTypeEnumMap = {
   CommandType.bluetooth: 'bluetooth',
   CommandType.network: 'network',
   CommandType.script: 'script',
+  CommandType.integration: 'integration',
 };
 
 const _$CommandGroupTypeEnumMap = {
@@ -120,4 +128,10 @@ const _$NetworkRequestTypeEnumMap = {
   NetworkRequestType.delete: 'delete',
   NetworkRequestType.head: 'head',
   NetworkRequestType.put: 'put',
+};
+
+const _$IntegrationActionEnumMap = {
+  IntegrationAction.toggleLight: 'toggle_light',
+  IntegrationAction.brightnessUp: 'brightness_up',
+  IntegrationAction.brightnessDown: 'brightness_down',
 };

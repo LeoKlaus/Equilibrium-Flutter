@@ -1,3 +1,4 @@
+import 'package:equilibrium_flutter/models/enums/integration_action.dart';
 import 'package:equilibrium_flutter/models/enums/remote_button.dart';
 import 'package:equilibrium_flutter/models/enums/command_type.dart';
 import 'package:equilibrium_flutter/models/enums/command_group_type.dart';
@@ -35,6 +36,10 @@ class Command {
   String? btMediaAction;
   @JsonKey(includeToJson: false)
   List<Macro>? macros;
+  @JsonKey(name: 'integration_action')
+  IntegrationAction? integrationAction;
+  @JsonKey(name: 'integration_entity')
+  String? integrationEntity;
 
   Command({
     this.id,
@@ -50,6 +55,8 @@ class Command {
     this.btAction,
     this.btMediaAction,
     this.macros,
+    this.integrationAction,
+    this.integrationEntity
   }) : _deviceId = deviceId;
 
   factory Command.fromJson(Map<String, dynamic> json) =>

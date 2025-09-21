@@ -5,7 +5,8 @@ enum CommandType {
   @JsonValue("ir") infrared,
   @JsonValue("bluetooth") bluetooth,
   @JsonValue("network") network,
-  @JsonValue("script") script;
+  @JsonValue("script") script,
+  @JsonValue("integration") integration;
 
 
   static List<DropdownMenuEntry<CommandType>> dropDownEntries = [
@@ -14,5 +15,6 @@ enum CommandType {
     DropdownMenuEntry(value: CommandType.network, label: "Network"),
     // TODO: Enable when script commands are available
     //DropdownMenuEntry(value: CommandType.script, label: "Script"),
+    DropdownMenuEntry(value: CommandType.integration, label: "Integration")
   ];
 }
