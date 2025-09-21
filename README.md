@@ -10,6 +10,16 @@ If you're looking for an iOS app, I suggest using [Equilibrium-iOS](https://gith
 
 This is my first time using Flutter so expect mediocre code quality at best. If you'd like to contribute a feature, please fork this repo and create a PR.
 
+#### Builds
+To build the android app, use
+``` bash
+flutter build apk --split-per-abi --no-tree-shake-icons
+```
+for the WebUI
+``` bash
+flutter build web --wasm --base-href "/ui/" --no-tree-shake-icons
+```
+
 ## Installation
 
 The web version of this will be bundled with future releases of Equilibrium, an Android APK is available in the [releases](https://github.com/LeoKlaus/Equilibrium-Flutter/releases) section.
